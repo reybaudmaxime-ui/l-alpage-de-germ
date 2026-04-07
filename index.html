@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L'Alpage de Germ | Restaurant de Montagne</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        wood: {
+                            100: '#f4ebd8',
+                            200: '#e0c9a3',
+                            500: '#8b5a2b',
+                            800: '#4a3014',
+                            900: '#2d1b08',
+                        },
+                        slate: {
+                            800: '#2d3748',
+                            900: '#1a202c',
+                        }
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                        'bounce-slow': 'bounce 3s infinite',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .bg-hero {
+            background-color: #2d1b08;
+            background-image: linear-gradient(to bottom, rgba(26, 32, 44, 0.4), rgba(45, 27, 8, 0.8)), url('https://image.noelshack.com/fichiers/2026/13/5/1774566061-unnamed.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        .tab-active {
+            border-bottom: 2px solid #8b5a2b;
+            color: #8b5a2b;
+            font-weight: 600;
+        }
+        .image-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #e2e8f0;
+            color: #64748b;
+            font-style: italic;
+            text-align: center;
+            padding: 1rem;
+        }
+        /* Animations au scroll */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="font-sans bg-[#fcfbf9] text-gray-800 antialiased selection:bg-wood-500 selection:text-white">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-transparent transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="#" id="nav-logo" class="font-serif text-2xl font-bold text-white flex items-center gap-2 transition-colors hover:opacity-80">
+                        <img src="https://image.noelshack.com/fichiers/2026/13/5/1774644066-design-sans-titre-2.png" id="nav-logo-img" alt="Logo L'Alpage de Germ" class="h-12 w-auto transition-all duration-300">
+                    </a>
+                </div>
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="#concept" class="nav-item text-white/90 hover:text-white transition-colors font-medium">Le Concept</a>
+                    <a href="#menu" class="nav-item text-white/90 hover:text-white transition-colors font-medium">Notre Carte</a>
+                    <a href="#fournisseurs" class="nav-item text-white/90 hover:text-white transition-colors font-medium">Nos Producteurs</a>
+                    <a href="#contact" class="bg-wood-500 hover:bg-wood-800 text-white px-5 py-2.5 rounded-full transition-colors font-medium">Réserver</a>
+                </div>
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-white hover:text-gray-200 focus:outline-none transition-colors">
+                        <i data-lucide="menu" class="h-6 w-6"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 shadow-lg">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#concept" class="block px-3 py-2 text-gray-600 font-medium">Le Concept</a>
+                <a href="#menu" class="block px-3 py-2 text-gray-600 font-medium">Notre Carte</a>
+                <a href="#fournisseurs" class="block px-3 py-2 text-gray-600 font-medium">Nos Producteurs</a>
+                <a href="#contact" class="block px-3 py-2 text-wood-500 font-bold">Réserver</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="bg-hero h-screen flex items-center justify-center pt-20 relative overflow-hidden">
+        <div class="text-center px-4 max-w-4xl mx-auto z-10 reveal active">
+            <span class="block text-wood-200 font-medium tracking-[0.2em] uppercase mb-6 text-sm md:text-base">Authenticité & Terroir</span>
+            
+            <h1 class="mb-0 flex justify-center">
+                <img src="https://image.noelshack.com/fichiers/2026/13/5/1774644066-design-sans-titre-2.png" alt="L'Alpage de Germ" class="h-48 md:h-64 lg:h-80 w-auto object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-700">
+            </h1>
+            
+            <p class="text-lg md:text-xl text-gray-100 mb-10 max-w-2xl mx-auto font-light leading-relaxed drop-shadow-md">
+                Une expérience gastronomique de montagne qui éveille les cinq sens. Découvrez une cuisine locale, authentique et de saison au cœur des Pyrénées.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
+                <a href="#menu" class="group relative px-8 py-3 overflow-hidden rounded-full bg-white/10 backdrop-blur-sm border border-white/30 hover:bg-white/20 hover:border-white/50 transition-all text-lg font-medium text-white shadow-lg">
+                    <span class="relative z-10 flex items-center gap-2">Découvrir la carte <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i></span>
+                </a>
+                <a href="#contact" class="px-8 py-3 rounded-full bg-wood-500 hover:bg-wood-800 text-white transition-all text-lg font-medium shadow-[0_0_20px_rgba(139,90,43,0.4)] hover:shadow-[0_0_25px_rgba(139,90,43,0.6)] hover:-translate-y-0.5">
+                    Réserver une table
+                </a>
+            </div>
+        </div>
+        
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce-slow opacity-70 hover:opacity-100 transition-opacity">
+            <a href="#concept" class="text-white flex flex-col items-center gap-2">
+                <span class="text-xs uppercase tracking-widest font-medium">Découvrir</span>
+                <i data-lucide="chevron-down" class="w-6 h-6"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- Le Concept -->
+    <section id="concept" class="py-24 bg-white relative">
+        <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none opacity-50">
+            <div class="absolute -top-24 -right-24 w-96 h-96 bg-wood-100 rounded-full blur-3xl"></div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div class="relative reveal">
+                    <div class="aspect-[4/5] bg-gray-200 rounded-2xl overflow-hidden image-placeholder relative z-10 shadow-2xl group">
+                        <img src="https://image.noelshack.com/fichiers/2026/13/5/1774645234-screenshot-from-2026-03-26-23-55-29.png" alt="Intérieur de L'Alpage de Germ" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 mix-blend-multiply">
+                    </div>
+                    <div class="absolute -bottom-6 -right-6 w-2/3 aspect-square bg-gradient-to-br from-wood-100 to-wood-200 rounded-3xl -z-10 shadow-lg transform rotate-3"></div>
+                </div>
+                <div class="reveal">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="h-px w-8 bg-wood-500"></span>
+                        <span class="text-wood-500 font-medium uppercase tracking-widest text-sm">Notre Philosophie</span>
+                    </div>
+                    <h2 class="font-serif text-4xl lg:text-5xl font-bold text-wood-900 mb-6 leading-tight">Bienvenue en Altitude</h2>
+                    <p class="text-gray-600 text-lg mb-6 leading-relaxed">
+                        Situé dans le cadre exceptionnel de Germ, notre restaurant est une ode à la montagne. Ici, nous ne proposons pas d'hébergement, mais un voyage culinaire exclusif.
+                    </p>
+                    <p class="text-gray-600 text-lg mb-8 leading-relaxed">
+                        Notre approche repose sur le <strong class="text-wood-800">marketing expérientiel</strong> : éveiller vos 5 sens. De l'odeur réconfortante de la raclette en hiver à la fraîcheur d'un gaspacho coloré en été, chaque détail compte. Nous sélectionnons rigoureusement nos produits (Porc Noir de Bigorre, Truite des Pyrénées) pour vous offrir l'authenticité à l'état pur.
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-10">
+                        <div class="flex flex-col gap-3 p-5 rounded-xl bg-[#fcfbf9] border border-gray-100 shadow-sm hover:shadow-md transition-shadow hover:-translate-y-1">
+                            <div class="w-12 h-12 rounded-full bg-wood-100 flex items-center justify-center">
+                                <i data-lucide="utensils-crossed" class="h-6 w-6 text-wood-800"></i>
+                            </div>
+                            <h3 class="font-bold text-gray-900 text-lg">100% Maison</h3>
+                            <p class="text-sm text-gray-500">Des recettes élaborées sur place avec passion et savoir-faire.</p>
+                        </div>
+                        <div class="flex flex-col gap-3 p-5 rounded-xl bg-[#fcfbf9] border border-gray-100 shadow-sm hover:shadow-md transition-shadow hover:-translate-y-1">
+                            <div class="w-12 h-12 rounded-full bg-wood-100 flex items-center justify-center">
+                                <i data-lucide="map-pin" class="h-6 w-6 text-wood-800"></i>
+                            </div>
+                            <h3 class="font-bold text-gray-900 text-lg">Circuit Court</h3>
+                            <p class="text-sm text-gray-500">Privilégiant les artisans locaux des Pyrénées.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- La Carte -->
+    <section id="menu" class="py-24 bg-[#fcfbf9] relative">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <span class="text-wood-500 font-medium tracking-widest uppercase text-sm flex items-center justify-center gap-2 mb-2">
+                    <i data-lucide="chef-hat" class="w-4 h-4"></i> Notre Offre Gastronomique
+                </span>
+                <h2 class="font-serif text-4xl lg:text-5xl font-bold text-wood-900 mt-2">La Carte de l'Alpage</h2>
+            </div>
+
+            <!-- Les Planches (All Year) -->
+            <div class="mb-20 reveal">
+                <h3 class="font-serif text-2xl text-center text-slate-800 mb-10 flex items-center justify-center gap-4">
+                    <span class="h-px w-16 bg-gradient-to-r from-transparent to-wood-200"></span>
+                    Planches à Partager
+                    <span class="h-px w-16 bg-gradient-to-l from-transparent to-wood-200"></span>
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-center group hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-default">
+                        <div class="w-full mr-4">
+                            <div class="flex justify-between items-baseline mb-1">
+                                <h4 class="font-bold text-lg text-gray-900 group-hover:text-wood-500 transition-colors">Planche Mixte</h4>
+                                <span class="font-bold text-wood-500 whitespace-nowrap">22,00 €</span>
+                            </div>
+                            <p class="text-sm text-gray-500 leading-relaxed">L'alliance parfaite entre charcuteries locales et fromages de la vallée.</p>
+                        </div>
+                        <div class="w-12 h-12 rounded-full bg-wood-50 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                            <i data-lucide="beef" class="text-wood-500 w-6 h-6"></i>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-center group hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-default">
+                        <div class="w-full mr-4">
+                            <div class="flex justify-between items-baseline mb-1">
+                                <h4 class="font-bold text-lg text-gray-900 group-hover:text-wood-500 transition-colors">Planche de Charcuterie</h4>
+                                <span class="font-bold text-wood-500 whitespace-nowrap">18,00 €</span>
+                            </div>
+                            <p class="text-sm text-gray-500 leading-relaxed">Sélection artisanale (Jambon de pays, saucisson, coppa).</p>
+                        </div>
+                        <div class="w-12 h-12 rounded-full bg-wood-50 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                            <i data-lucide="beef" class="text-wood-500 w-6 h-6"></i>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-center group hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-default">
+                        <div class="w-full mr-4">
+                            <div class="flex justify-between items-baseline mb-1">
+                                <h4 class="font-bold text-lg text-gray-900 group-hover:text-wood-500 transition-colors">Planche de Fromage</h4>
+                                <span class="font-bold text-wood-500 whitespace-nowrap">16,00 €</span>
+                            </div>
+                            <p class="text-sm text-gray-500 leading-relaxed">Assortiment de tomes et fromages affinés des Pyrénées.</p>
+                        </div>
+                        <div class="w-12 h-12 rounded-full bg-wood-50 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                            <i data-lucide="cheese" class="text-wood-500 w-6 h-6"></i>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-center group hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-default">
+                        <div class="w-full mr-4">
+                            <div class="flex justify-between items-baseline mb-1">
+                                <h4 class="font-bold text-lg text-gray-900 group-hover:text-wood-500 transition-colors">Planche de Tartinables</h4>
+                                <span class="font-bold text-wood-500 whitespace-nowrap">12,00 €</span>
+                            </div>
+                            <p class="text-sm text-gray-500 leading-relaxed">Rillettes, tapenades et créations végétales du chef.</p>
+                        </div>
+                        <div class="w-12 h-12 rounded-full bg-wood-50 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                            <i data-lucide="utensils" class="text-wood-500 w-6 h-6"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Saison Tabs -->
+            <div class="flex justify-center mb-16 reveal">
+                <div class="bg-gray-100 p-1 rounded-full inline-flex">
+                    <button onclick="switchTab('ete')" id="btn-ete" class="px-8 py-3 rounded-full text-base font-medium transition-all duration-300 flex items-center gap-2 bg-white text-wood-500 shadow-sm">
+                        <i data-lucide="sun" class="w-5 h-5"></i> Menu d'Été
+                    </button>
+                    <button onclick="switchTab('hiver')" id="btn-hiver" class="px-8 py-3 rounded-full text-base font-medium transition-all duration-300 flex items-center gap-2 text-gray-500 hover:text-gray-700">
+                        <i data-lucide="snowflake" class="w-5 h-5"></i> Menu d'Hiver
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tab Content: ÉTÉ -->
+            <div id="tab-ete" class="block animate-fade-in-up reveal">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                    <!-- Entrées Été -->
+                    <div class="bg-white p-8 rounded-3xl shadow-[0_10px_40px_-15px_rgba(0,0,0,0.05)] border border-gray-50">
+                        <h3 class="font-serif text-3xl text-wood-900 mb-8 flex items-center gap-3">
+                            <i data-lucide="leaf" class="text-wood-500"></i> Entrées Estivales
+                        </h3>
+                        <ul class="space-y-6">
+                            <li class="group">
+                                <div class="flex justify-between items-baseline">
+                                    <h4 class="font-bold text-gray-800 group-hover:text-wood-500 transition-colors">Truite des Pyrénées façon gravelax</h4>
+                                    <span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4 opacity-50 transition-opacity group-hover:opacity-100"></span>
+                                    <span class="font-bold text-wood-900 whitespace-nowrap">14,00 €</span>
+                                </div>
+                            </li>
+                            <li class="group">
+                                <div class="flex justify-between items-baseline">
+                                    <h4 class="font-bold text-gray-800 group-hover:text-wood-500 transition-colors">Tomate cœur de bœuf & mozzarella locale</h4>
+                                    <span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4 opacity-50 transition-opacity group-hover:opacity-100"></span>
+                                    <span class="font-bold text-wood-900 whitespace-nowrap">11,00 €</span>
+                                </div>
+                            </li>
+                            <li class="group">
+                                <div class="flex justify-between items-baseline">
+                                    <h4 class="font-bold text-gray-800 group-hover:text-wood-500 transition-colors">Salade de saison (selon arrivage)</h4>
+                                    <span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4 opacity-50 transition-opacity group-hover:opacity-100"></span>
+                                    <span class="font-bold text-wood-900 whitespace-nowrap">7,00 €</span>
+                                </div>
+                            </li>
+                            <li class="group">
+                                <div class="flex justify-between items-baseline">
+                                    <h4 class="font-bold text-gray-800 group-hover:text-wood-500 transition-colors">Gaspacho coloré</h4>
+                                    <span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4 opacity-50 transition-opacity group-hover:opacity-100"></span>
+                                    <span class="font-bold text-wood-900 whitespace-nowrap">7,00 €</span>
+                                </div>
+                            </li>
+                            <li class="group">
+                                <div class="flex justify-between items-baseline">
+                                    <h4 class="font-bold text-gray-800 group-hover:text-wood-500 transition-colors">Salade de lentilles du pays</h4>
+                                    <span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4 opacity-50 transition-opacity group-hover:opacity-100"></span>
+                                    <span class="font-bold text-wood-900 whitespace-nowrap">8,50 €</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- Plats Été -->
+                    <div class="bg-white p-8 rounded-3xl shadow-[0_10px_40px_-15px_rgba(0,0,0,0.05)] border border-gray-50 flex flex-col">
+                        <h3 class="font-serif text-3xl text-wood-900 mb-8 flex items-center gap-3">
+                            <i data-lucide="utensils" class="text-wood-500"></i> Plats d'Été
+                        </h3>
+                        <ul class="space-y-6 flex-grow">
+                            <li class="group">
+                                <div class="flex justify-between items-baseline">
+                                    <h4 class="font-bold text-gray-800 group-hover:text-wood-500 transition-colors">Axoa de veau</h4>
+                                    <span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4 opacity-50 transition-opacity group-hover:opacity-100"></span>
+                                    <span class="font-bold text-wood-900 whitespace-nowrap">19,00 €</span>
+                                </div>
+                            </li>
+                            <li class="group">
+                                <div class="flex justify-between items-baseline">
+                                    <h4 class="font-bold text-gray-800 group-hover:text-wood-500 transition-colors">Truite des Pyrénées cuite en papillote</h4>
+                                    <span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4 opacity-50 transition-opacity group-hover:opacity-100"></span>
+                                    <span class="font-bold text-wood-900 whitespace-nowrap">21,00 €</span>
+                                </div>
+                            </li>
+                            <li class="group">
+                                <div class="flex justify-between items-baseline">
+                                    <h4 class="font-bold text-gray-800 group-hover:text-wood-500 transition-colors">Assortiment de grillades</h4>
+                                    <span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4 opacity-50 transition-opacity group-hover:opacity-100"></span>
+                                    <span class="font-bold text-wood-900 whitespace-nowrap">26,00 €</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Content: HIVER -->
+            <div id="tab-hiver" class="hidden animate-fade-in-up reveal">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                    <!-- Entrées Hiver -->
+                    <div class="bg-white p-8 rounded-3xl shadow-[0_10px_40px_-15px_rgba(0,0,0,0.05)] border border-gray-50">
+                        <h3 class="font-serif text-3xl text-wood-900 mb-8 flex items-center gap-3">
+                            <i data-lucide="flame" class="text-wood-500"></i> Entrées Réconfortantes
+                        </h3>
+                        <ul class="space-y-6">
+                            <li class="group">
+                                <div class="flex justify-between items-baseline">
+                                    <h4 class="font-bold text-gray-800 group-hover:text-wood-500 transition-colors">Garbure Pyrénéenne</h4>
+                                    <span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4 opacity-50 transition-opacity group-hover:opacity-100"></span>
+                                    <span class="font-bold text-wood-900 whitespace-nowrap">14,00 €</span>
+                                </div>
+                            </li>
+                            <li class="group">
+                                <div class="flex justify-between items-baseline">
+                                    <h4 class="font-bold text-gray-800 group-hover:text-wood-500 transition-colors">Salade de gésier</h4>
+                                    <span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4 opacity-50 transition-opacity group-hover:opacity-100"></span>
+                                    <span class="font-bold text-wood-900 whitespace-nowrap">11,00 €</span>
+                                </div>
+                            </li>
+                            <li class="group">
+                                <div class="flex justify-between items-baseline">
+                                    <h4 class="font-bold text-gray-800 group-hover:text-wood-500 transition-colors">Pastis gascon salé au boudin noir</h4>
+                                    <span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4 opacity-50 transition-opacity group-hover:opacity-100"></span>
+                                    <span class="font-bold text-wood-900 whitespace-nowrap">8,50 €</span>
+                                </div>
+                            </li>
+                            <li class="group">
+                                <div class="flex justify-between items-baseline">
+                                    <h4 class="font-bold text-gray-800 group-hover:text-wood-500 transition-colors">Velouté de légumes de saisons</h4>
+                                    <span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4 opacity-50 transition-opacity group-hover:opacity-100"></span>
+                                    <span class="font-bold text-wood-900 whitespace-nowrap">7,00 €</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- Plats Hiver -->
+                    <div class="bg-white p-8 rounded-3xl shadow-[0_10px_40px_-15px_rgba(0,0,0,0.05)] border border-gray-50 flex flex-col">
+                        <h3 class="font-serif text-3xl text-wood-900 mb-8 flex items-center gap-3">
+                            <i data-lucide="utensils" class="text-wood-500"></i> Plats d'Hiver
+                        </h3>
+                        <ul class="space-y-6 flex-grow">
+                            <li class="group">
+                                <div class="flex justify-between items-baseline">
+                                    <h4 class="font-bold text-gray-800 group-hover:text-wood-500 transition-colors">Porc noir de bigorre</h4>
+                                    <span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4 opacity-50 transition-opacity group-hover:opacity-100"></span>
+                                    <span class="font-bold text-wood-900 whitespace-nowrap">26,00 €</span>
+                                </div>
+                            </li>
+                            <li class="group">
+                                <div class="flex justify-between items-baseline">
+                                    <h4 class="font-bold text-gray-800 group-hover:text-wood-500 transition-colors">Raclette à volonté</h4>
+                                    <span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4 opacity-50 transition-opacity group-hover:opacity-100"></span>
+                                    <span class="font-bold text-wood-900 whitespace-nowrap">25,00 €</span>
+                                </div>
+                            </li>
+                            <li class="group">
+                                <div class="flex justify-between items-baseline">
+                                    <h4 class="font-bold text-gray-800 group-hover:text-wood-500 transition-colors">Pot-au-feu traditionnel</h4>
+                                    <span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4 opacity-50 transition-opacity group-hover:opacity-100"></span>
+                                    <span class="font-bold text-wood-900 whitespace-nowrap">19,00 €</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Fournisseurs & Qualité -->
+    <section id="fournisseurs" class="py-24 bg-slate-900 relative overflow-hidden text-white">
+        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-10 mix-blend-overlay"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/90 to-slate-900"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16 reveal">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-wood-500/20 backdrop-blur-sm border border-wood-500/30 mb-6">
+                    <i data-lucide="award" class="h-8 w-8 text-wood-200"></i>
+                </div>
+                <h2 class="font-serif text-4xl lg:text-5xl font-bold mb-6 text-white drop-shadow-md">L'Excellence de nos Producteurs</h2>
+                <p class="text-gray-300 text-lg max-w-2xl mx-auto leading-relaxed">Parce qu'une grande cuisine ne peut exister sans d'excellents produits, nous travaillons en étroite collaboration avec les artisans de notre région.</p>
+            </div>
+            
+            <div class="relative max-w-6xl mx-auto px-12 reveal">
+                <!-- Carousel Container -->
+                <div class="overflow-hidden relative" id="carousel-container">
+                    <div class="flex flex-nowrap transition-transform duration-500 ease-in-out" id="carousel-track">
+                        
+                        <!-- Slide 1: Pierre Oteiza -->
+                        <div class="w-full sm:w-1/2 lg:w-1/3 flex-shrink-0 px-4">
+                            <div class="glass-card p-8 rounded-2xl h-full flex flex-col group hover:-translate-y-2 transition-transform duration-300">
+                                <div class="flex items-center gap-4 mb-4">
+                                    <div class="w-12 h-12 rounded-full bg-wood-500/20 flex items-center justify-center border border-wood-500/30 group-hover:scale-110 transition-transform">
+                                        <i data-lucide="tractor" class="w-6 h-6 text-wood-200"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-serif text-xl font-bold text-white">Pierre Oteiza</h3>
+                                        <p class="text-xs text-wood-200 uppercase tracking-widest font-medium">Les Aldudes</p>
+                                    </div>
+                                </div>
+                                <p class="text-gray-300 leading-relaxed mt-4 flex-grow text-sm">Éleveur-artisan historique, fournisseur de nos charcuteries d'exception : Saucisson, Jambon de pays et Chorizo. Un savoir-faire unique transmis de génération en génération.</p>
+                            </div>
+                        </div>
+
+                        <!-- Slide 2: Pierre Sajous -->
+                        <div class="w-full sm:w-1/2 lg:w-1/3 flex-shrink-0 px-4">
+                            <div class="glass-card p-8 rounded-2xl h-full flex flex-col group hover:-translate-y-2 transition-transform duration-300">
+                                <div class="flex items-center gap-4 mb-4">
+                                    <div class="w-12 h-12 rounded-full bg-wood-500/20 flex items-center justify-center border border-wood-500/30 group-hover:scale-110 transition-transform">
+                                        <i data-lucide="store" class="w-6 h-6 text-wood-200"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-serif text-xl font-bold text-white">Pierre Sajous</h3>
+                                        <p class="text-xs text-wood-200 uppercase tracking-widest font-medium">Beaucens</p>
+                                    </div>
+                                </div>
+                                <p class="text-gray-300 leading-relaxed mt-4 flex-grow text-sm">Partenaire de confiance pour notre Coppa, Pâté de campagne et Rillettes de canard. La tradition charcutière pyrénéenne magnifiée dans chaque bouchée.</p>
+                            </div>
+                        </div>
+
+                        <!-- Slide 3: Brasserie des Pics -->
+                        <div class="w-full sm:w-1/2 lg:w-1/3 flex-shrink-0 px-4">
+                            <div class="glass-card p-8 rounded-2xl h-full flex flex-col group hover:-translate-y-2 transition-transform duration-300">
+                                <div class="flex items-center gap-4 mb-4">
+                                    <div class="w-12 h-12 rounded-full bg-wood-500/20 flex items-center justify-center border border-wood-500/30 group-hover:scale-110 transition-transform">
+                                        <i data-lucide="beer" class="w-6 h-6 text-wood-200"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-serif text-xl font-bold text-white">Brasserie des Pics</h3>
+                                        <p class="text-xs text-wood-200 uppercase tracking-widest font-medium">Hautes-Pyrénées</p>
+                                    </div>
+                                </div>
+                                <p class="text-gray-300 leading-relaxed mt-4 flex-grow text-sm">Créateurs de bières artisanales locales de caractère, dont notre incontournable "La Nestoise Blonde", brassée avec l'eau pure de nos montagnes.</p>
+                            </div>
+                        </div>
+
+                        <!-- Slide 4: Domaine du Moulié -->
+                        <div class="w-full sm:w-1/2 lg:w-1/3 flex-shrink-0 px-4">
+                            <div class="glass-card p-8 rounded-2xl h-full flex flex-col group hover:-translate-y-2 transition-transform duration-300">
+                                <div class="flex items-center gap-4 mb-4">
+                                    <div class="w-12 h-12 rounded-full bg-wood-500/20 flex items-center justify-center border border-wood-500/30 group-hover:scale-110 transition-transform">
+                                        <i data-lucide="wine" class="w-6 h-6 text-wood-200"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-serif text-xl font-bold text-white">Domaine du Moulié</h3>
+                                        <p class="text-xs text-wood-200 uppercase tracking-widest font-medium">Cannet</p>
+                                    </div>
+                                </div>
+                                <p class="text-gray-300 leading-relaxed mt-4 flex-grow text-sm">Domaine viticole d'exception de notre carte, produisant nos superbes vins AOC Madiran et Pacherenc du Vic Bilh pour sublimer notre Porc noir de Bigorre.</p>
+                            </div>
+                        </div>
+
+                        <!-- Slide 5: Brasserie Jean Brasse -->
+                        <div class="w-full sm:w-1/2 lg:w-1/3 flex-shrink-0 px-4">
+                            <div class="glass-card p-8 rounded-2xl h-full flex flex-col group hover:-translate-y-2 transition-transform duration-300">
+                                <div class="flex items-center gap-4 mb-4">
+                                    <div class="w-12 h-12 rounded-full bg-wood-500/20 flex items-center justify-center border border-wood-500/30 group-hover:scale-110 transition-transform">
+                                        <i data-lucide="glass-water" class="w-6 h-6 text-wood-200"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-serif text-xl font-bold text-white">Brasserie Jean Brasse</h3>
+                                        <p class="text-xs text-wood-200 uppercase tracking-widest font-medium">Gers</p>
+                                    </div>
+                                </div>
+                                <p class="text-gray-300 leading-relaxed mt-4 flex-grow text-sm">Artisans brasseurs passionnés du Gers, à l'origine de notre "Nestoise Ambrée". Une bière ronde et généreuse parfaite pour accompagner nos plats d'hiver.</p>
+                            </div>
+                        </div>
+
+                        <!-- Slide 6: Egiazki -->
+                        <div class="w-full sm:w-1/2 lg:w-1/3 flex-shrink-0 px-4">
+                            <div class="glass-card p-8 rounded-2xl h-full flex flex-col group hover:-translate-y-2 transition-transform duration-300">
+                                <div class="flex items-center gap-4 mb-4">
+                                    <div class="w-12 h-12 rounded-full bg-wood-500/20 flex items-center justify-center border border-wood-500/30 group-hover:scale-110 transition-transform">
+                                        <i data-lucide="martini" class="w-6 h-6 text-wood-200"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-serif text-xl font-bold text-white">Egiazki</h3>
+                                        <p class="text-xs text-wood-200 uppercase tracking-widest font-medium">Pays Basque</p>
+                                    </div>
+                                </div>
+                                <p class="text-gray-300 leading-relaxed mt-4 flex-grow text-sm">Producteurs engagés du célèbre Pastis artisanal basque "Odeia" et d'autres liqueurs locales, pour une mise en bouche rafraîchissante et authentique.</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Carousel Controls -->
+                <button id="prevBtn" class="absolute left-0 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-wood-900/60 hover:bg-wood-500 border border-wood-500/30 text-white flex items-center justify-center transition-all z-20 backdrop-blur-sm shadow-lg group">
+                    <i data-lucide="chevron-left" class="group-hover:-translate-x-0.5 transition-transform"></i>
+                </button>
+                <button id="nextBtn" class="absolute right-0 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-wood-900/60 hover:bg-wood-500 border border-wood-500/30 text-white flex items-center justify-center transition-all z-20 backdrop-blur-sm shadow-lg group">
+                    <i data-lucide="chevron-right" class="group-hover:translate-x-0.5 transition-transform"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact & Réservation -->
+    <section id="contact" class="py-24 bg-white relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <!-- Form & Info -->
+                <div class="reveal">
+                    <span class="text-wood-500 font-medium tracking-widest uppercase text-sm mb-2 block">Nous rencontrer</span>
+                    <h2 class="font-serif text-4xl lg:text-5xl font-bold text-wood-900 mb-6">Réserver une table</h2>
+                    <p class="text-gray-600 mb-10 text-lg leading-relaxed">Nous vous conseillons de réserver votre table à l'avance, particulièrement en haute saison (été et hiver).</p>
+                    
+                    <!-- Modified Form with proper UI success message instead of alert() -->
+                    <form id="booking-form" class="space-y-6 mb-12 bg-[#fcfbf9] p-8 rounded-3xl border border-gray-100 shadow-lg shadow-gray-200/50">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Nom complet</label>
+                                <input type="text" class="w-full px-5 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-wood-500/50 focus:border-wood-500 outline-none transition-all shadow-sm" placeholder="Votre nom" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Téléphone</label>
+                                <input type="tel" class="w-full px-5 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-wood-500/50 focus:border-wood-500 outline-none transition-all shadow-sm" placeholder="06 00 00 00 00" required>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Date souhaitée</label>
+                                <input type="date" class="w-full px-5 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-wood-500/50 focus:border-wood-500 outline-none transition-all shadow-sm" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Nombre de convives</label>
+                                <select class="w-full px-5 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-wood-500/50 focus:border-wood-500 outline-none transition-all shadow-sm appearance-none">
+                                    <option>2 personnes</option>
+                                    <option>3 personnes</option>
+                                    <option>4 personnes</option>
+                                    <option>5 personnes</option>
+                                    <option>6+ personnes</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="w-full bg-wood-900 hover:bg-wood-500 text-white font-medium py-4 rounded-xl transition-colors mt-2 flex items-center justify-center gap-2 shadow-md">
+                            Confirmer la demande <i data-lucide="send" class="w-4 h-4"></i>
+                        </button>
+                    </form>
+
+                    <!-- Success Message (Hidden by default) -->
+                    <div id="form-success" class="hidden mb-12 bg-green-50 p-8 rounded-3xl border border-green-200 shadow-lg flex-col items-center justify-center text-center gap-4">
+                        <i data-lucide="check-circle" class="w-12 h-12 text-green-500"></i>
+                        <h3 class="font-serif text-2xl font-bold text-green-800">Merci !</h3>
+                        <p class="text-green-700">Votre demande de réservation a bien été envoyée. Nous vous confirmerons votre table très prochainement.</p>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="flex items-start gap-5">
+                            <div class="w-12 h-12 rounded-full bg-wood-50 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="map-pin" class="h-6 w-6 text-wood-500"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-900 text-lg mb-1">Adresse</h4>
+                                <p class="text-gray-600 leading-relaxed">Village de Germ, 65240 Hautes-Pyrénées<br><span class="text-sm italic text-gray-500">(Restaurant de montagne, pas d'hébergement)</span></p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-5">
+                            <div class="w-12 h-12 rounded-full bg-wood-50 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="clock" class="h-6 w-6 text-wood-500"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-900 text-lg mb-1">Horaires d'ouverture</h4>
+                                <p class="text-gray-600 leading-relaxed">Service du Midi : 12h00 - 14h30<br>Service du Soir : 19h00 - 22h00</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Map Placeholder -->
+                <div class="reveal h-full min-h-[500px]">
+                    <div class="bg-gray-200 rounded-3xl overflow-hidden relative image-placeholder h-full shadow-2xl shadow-gray-200/50 group">
+                        <div class="z-10 text-center p-6 bg-white/80 backdrop-blur-md rounded-2xl m-6 shadow-lg transform group-hover:-translate-y-2 transition-transform duration-500">
+                            <i data-lucide="map" class="h-10 w-10 mx-auto mb-3 text-wood-500"></i>
+                            <span class="font-bold text-slate-800 block text-lg">L'Alpage de Germ</span>
+                            <span class="text-sm text-gray-600">65240 Hautes-Pyrénées</span>
+                        </div>
+                        <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=1000&auto=format&fit=crop" alt="Carte" class="absolute inset-0 w-full h-full object-cover opacity-70 mix-blend-luminosity group-hover:scale-105 transition-transform duration-1000">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-gray-400 py-16 border-t border-slate-800 relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-wood-500 to-transparent opacity-50"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-12 text-center md:text-left relative z-10">
+            <div>
+                <a href="#" class="font-serif text-3xl font-bold text-white mb-6 flex items-center justify-center md:justify-start gap-3 hover:text-wood-200 transition-colors">
+                    <i data-lucide="mountain" class="h-8 w-8 text-wood-500"></i>
+                    L'Alpage
+                </a>
+                <p class="text-sm leading-relaxed max-w-xs mx-auto md:mx-0">Restaurant gastronomique montagnard.<br>L'expérience authentique des Pyrénées à l'état pur.</p>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-6 uppercase tracking-widest text-sm">Liens Utiles</h4>
+                <ul class="space-y-3 text-sm">
+                    <li><a href="#concept" class="hover:text-wood-500 hover:translate-x-1 inline-block transition-transform">Le Concept</a></li>
+                    <li><a href="#menu" class="hover:text-wood-500 hover:translate-x-1 inline-block transition-transform">La Carte</a></li>
+                    <li><a href="#fournisseurs" class="hover:text-wood-500 hover:translate-x-1 inline-block transition-transform">Nos Producteurs</a></li>
+                    <li><a href="#" class="hover:text-wood-500 hover:translate-x-1 inline-block transition-transform">Mentions Légales</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-6 uppercase tracking-widest text-sm">Suivez-nous</h4>
+                <div class="flex space-x-4 justify-center md:justify-start mb-8">
+                    <a href="#" class="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center hover:bg-wood-500 hover:text-white transition-all hover:-translate-y-1 hover:shadow-lg">
+                        <i data-lucide="instagram" class="w-5 h-5"></i>
+                    </a>
+                    <a href="#" class="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center hover:bg-wood-500 hover:text-white transition-all hover:-translate-y-1 hover:shadow-lg">
+                        <i data-lucide="facebook" class="w-5 h-5"></i>
+                    </a>
+                </div>
+                <p class="text-xs text-slate-500">© 2026 L'Alpage de Germ.<br>Projet d'étude. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            const logo = document.getElementById('nav-logo');
+            const logoImg = document.getElementById('nav-logo-img');
+            const navItems = document.querySelectorAll('.nav-item');
+            const mobileBtn = document.getElementById('mobile-menu-btn');
+
+            if (window.scrollY > 50) {
+                navbar.classList.add('shadow-md', 'bg-white/95', 'backdrop-blur-md');
+                navbar.classList.remove('bg-transparent');
+                
+                if (logo) { logo.classList.add('text-wood-900'); logo.classList.remove('text-white'); }
+                if (logoImg) { logoImg.classList.add('brightness-0'); }
+                navItems.forEach(item => {
+                    item.classList.add('text-gray-600', 'hover:text-wood-500');
+                    item.classList.remove('text-white/90', 'hover:text-white');
+                });
+                if (mobileBtn) { mobileBtn.classList.add('text-gray-600', 'hover:text-wood-500'); mobileBtn.classList.remove('text-white', 'hover:text-gray-200'); }
+            } else {
+                navbar.classList.add('bg-transparent');
+                navbar.classList.remove('shadow-md', 'bg-white/95', 'backdrop-blur-md');
+                
+                if (logo) { logo.classList.add('text-white'); logo.classList.remove('text-wood-900'); }
+                if (logoImg) { logoImg.classList.remove('brightness-0'); }
+                navItems.forEach(item => {
+                    item.classList.add('text-white/90', 'hover:text-white');
+                    item.classList.remove('text-gray-600', 'hover:text-wood-500');
+                });
+                if (mobileBtn) { mobileBtn.classList.add('text-white', 'hover:text-gray-200'); mobileBtn.classList.remove('text-gray-600', 'hover:text-wood-500'); }
+            }
+        });
+
+        // Mobile Menu Toggle
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+
+        // Tab Switching Logic (Été / Hiver)
+        function switchTab(saison) {
+            const tabEte = document.getElementById('tab-ete');
+            const tabHiver = document.getElementById('tab-hiver');
+            const btnEte = document.getElementById('btn-ete');
+            const btnHiver = document.getElementById('btn-hiver');
+
+            // Classes pour le bouton actif
+            const activeClasses = ['bg-white', 'text-wood-500', 'shadow-sm'];
+            // Classes pour le bouton inactif
+            const inactiveClasses = ['text-gray-500', 'hover:text-gray-700'];
+
+            if (saison === 'ete') {
+                tabEte.classList.remove('hidden');
+                tabEte.classList.add('block');
+                tabHiver.classList.remove('block');
+                tabHiver.classList.add('hidden');
+                
+                btnEte.classList.add(...activeClasses);
+                btnEte.classList.remove(...inactiveClasses);
+                btnHiver.classList.remove(...activeClasses);
+                btnHiver.classList.add(...inactiveClasses);
+            } else {
+                tabHiver.classList.remove('hidden');
+                tabHiver.classList.add('block');
+                tabEte.classList.remove('block');
+                tabEte.classList.add('hidden');
+                
+                btnHiver.classList.add(...activeClasses);
+                btnHiver.classList.remove(...inactiveClasses);
+                btnEte.classList.remove(...activeClasses);
+                btnEte.classList.add(...inactiveClasses);
+            }
+        }
+
+        // Handle Booking Form Submission
+        document.getElementById('booking-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            this.classList.add('hidden');
+            const successMsg = document.getElementById('form-success');
+            successMsg.classList.remove('hidden');
+            successMsg.classList.add('flex');
+        });
+
+        // Carousel Logic for "Nos Producteurs"
+        const track = document.getElementById('carousel-track');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        let currentIndex = 0;
+
+        function getItemsPerView() {
+            if (window.innerWidth >= 1024) return 3; // lg (Desktop)
+            if (window.innerWidth >= 640) return 2;  // sm (Tablet)
+            return 1;                                // Mobile
+        }
+
+        function updateCarousel() {
+            if (!track || track.children.length === 0) return;
+            const itemsPerView = getItemsPerView();
+            const totalItems = track.children.length;
+            const maxIndex = Math.max(0, totalItems - itemsPerView);
+            
+            if (currentIndex > maxIndex) currentIndex = maxIndex;
+            if (currentIndex < 0) currentIndex = 0;
+            
+            const itemWidth = track.children[0].getBoundingClientRect().width;
+            track.style.transform = `translateX(-${currentIndex * itemWidth}px)`;
+            
+            // Handle buttons visibility
+            prevBtn.style.opacity = currentIndex === 0 ? '0.5' : '1';
+            prevBtn.style.cursor = currentIndex === 0 ? 'not-allowed' : 'pointer';
+            
+            nextBtn.style.opacity = currentIndex >= maxIndex ? '0.5' : '1';
+            nextBtn.style.cursor = currentIndex >= maxIndex ? 'not-allowed' : 'pointer';
+        }
+
+        if (nextBtn && prevBtn) {
+            nextBtn.addEventListener('click', () => {
+                const maxIndex = track.children.length - getItemsPerView();
+                if (currentIndex < maxIndex) {
+                    currentIndex++;
+                    updateCarousel();
+                }
+            });
+
+            prevBtn.addEventListener('click', () => {
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    updateCarousel();
+                }
+            });
+
+            // Recalculate on window resize
+            window.addEventListener('resize', updateCarousel);
+            // Initial calculation
+            updateCarousel();
+        }
+
+        // Scroll Reveal Animation Intersection Observer
+        document.addEventListener('DOMContentLoaded', () => {
+            const revealElements = document.querySelectorAll('.reveal');
+            
+            const revealOptions = {
+                threshold: 0.15,
+                rootMargin: "0px 0px -50px 0px"
+            };
+
+            const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, revealOptions);
+
+            revealElements.forEach(el => {
+                revealOnScroll.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>
