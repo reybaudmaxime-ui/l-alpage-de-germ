@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr" class="scroll-smooth">
+<html lang="fr" class="scroll-smooth overflow-x-hidden">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -101,7 +101,7 @@
         }
     </style>
 </head>
-<body class="font-sans bg-[#fcfbf9] text-gray-800 antialiased selection:bg-wood-500 selection:text-white">
+<body class="font-sans bg-[#fcfbf9] text-gray-800 antialiased selection:bg-wood-500 selection:text-white overflow-x-hidden w-full relative">
 
     <!-- Navigation -->
     <nav class="fixed w-full z-50 bg-transparent transition-all duration-300" id="navbar">
@@ -203,11 +203,11 @@
         
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                <div class="relative reveal">
+                <div class="relative reveal px-2 sm:px-0">
                     <div class="aspect-[4/5] bg-gray-200 rounded-2xl overflow-hidden image-placeholder relative z-10 shadow-2xl group">
                         <img src="https://image.noelshack.com/fichiers/2026/13/5/1774645234-screenshot-from-2026-03-26-23-55-29.png" alt="Intérieur de L'Alpage de Germ" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 mix-blend-multiply">
                     </div>
-                    <div class="absolute -bottom-6 -right-6 w-2/3 aspect-square bg-gradient-to-br from-wood-100 to-wood-200 rounded-3xl -z-10 shadow-lg transform rotate-3"></div>
+                    <div class="absolute -bottom-2 -right-0 sm:-bottom-6 sm:-right-6 w-2/3 aspect-square bg-gradient-to-br from-wood-100 to-wood-200 rounded-3xl -z-10 shadow-lg transform rotate-3"></div>
                 </div>
                 <div class="reveal">
                     <div class="flex items-center gap-3 mb-4">
@@ -567,18 +567,18 @@
                                         <p class="text-xs text-wood-200 uppercase tracking-widest font-medium">Pays Basque</p>
                                     </div>
                                 </div>
-                                <p data-i18n="prod_egiazki" class="text-gray-300 leading-relaxed mt-4 flex-grow text-sm">Producteurs engagés del célèbre Pastis artisanal basque "Odeia" et d'autres liqueurs locales, pour un apéritif authentique.</p>
+                                <p data-i18n="prod_egiazki" class="text-gray-300 leading-relaxed mt-4 flex-grow text-sm">Producteurs engagés del célèbre Pastis artisanal basque "Odeia" y d'autres liqueurs locales, pour un apéritif authentique.</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Carousel Controls -->
-                <button id="prevBtn" class="absolute left-0 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-wood-900/60 hover:bg-wood-500 border border-wood-500/30 text-white flex items-center justify-center transition-all z-20 backdrop-blur-sm shadow-lg group">
-                    <i data-lucide="chevron-left" class="group-hover:-translate-x-0.5 transition-transform"></i>
+                <button id="prevBtn" class="absolute left-0 sm:-left-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-wood-900/60 hover:bg-wood-500 border border-wood-500/30 text-white flex items-center justify-center transition-all z-20 backdrop-blur-sm shadow-lg group">
+                    <i data-lucide="chevron-left" class="w-5 h-5 sm:w-6 sm:h-6 group-hover:-translate-x-0.5 transition-transform"></i>
                 </button>
-                <button id="nextBtn" class="absolute right-0 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-wood-900/60 hover:bg-wood-500 border border-wood-500/30 text-white flex items-center justify-center transition-all z-20 backdrop-blur-sm shadow-lg group">
-                    <i data-lucide="chevron-right" class="group-hover:translate-x-0.5 transition-transform"></i>
+                <button id="nextBtn" class="absolute right-0 sm:-right-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-wood-900/60 hover:bg-wood-500 border border-wood-500/30 text-white flex items-center justify-center transition-all z-20 backdrop-blur-sm shadow-lg group">
+                    <i data-lucide="chevron-right" class="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-0.5 transition-transform"></i>
                 </button>
             </div>
         </div>
