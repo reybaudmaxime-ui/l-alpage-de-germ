@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Découvrez L'Alpage de Germ, restaurant gastronomique de montagne dans les Hautes-Pyrénées. Cuisine authentique, produits locaux en circuit court et ambiance chaleureuse.">
     <title>L'Alpage de Germ | Restaurant de Montagne</title>
+    <link rel="icon" href="https://image.noelshack.com/fichiers/2026/13/5/1774644066-design-sans-titre-2.png" type="image/png">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts -->
@@ -54,11 +56,6 @@
             background-position: center;
             background-attachment: fixed;
         }
-        .tab-active {
-            border-bottom: 2px solid #8b5a2b;
-            color: #8b5a2b;
-            font-weight: 600;
-        }
         .image-placeholder {
             display: flex;
             align-items: center;
@@ -84,6 +81,24 @@
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
+        /* FAQ Accordion */
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, opacity 0.3s ease-out, padding 0.3s ease-out;
+            opacity: 0;
+        }
+        .faq-answer.open {
+            max-height: 200px;
+            opacity: 1;
+            padding-top: 1rem;
+        }
+        .faq-icon {
+            transition: transform 0.3s ease;
+        }
+        .faq-icon.rotate {
+            transform: rotate(180deg);
+        }
     </style>
 </head>
 <body class="font-sans bg-[#fcfbf9] text-gray-800 antialiased selection:bg-wood-500 selection:text-white">
@@ -94,51 +109,79 @@
             <div class="flex justify-between items-center h-20">
                 <div class="flex-shrink-0 flex items-center">
                     <a href="#" id="nav-logo" class="font-serif text-2xl font-bold text-white flex items-center gap-2 transition-colors hover:opacity-80">
-                        <img src="https://image.noelshack.com/fichiers/2026/13/5/1774644066-design-sans-titre-2.png" id="nav-logo-img" alt="Logo L'Alpage de Germ" class="h-12 w-auto transition-all duration-300">
+                        <img src="https://image.noelshack.com/fichiers/2026/13/5/1774644066-design-sans-titre-2.png" id="nav-logo-img" alt="Logo L'Alpage de Germ" class="h-10 lg:h-12 w-auto transition-all duration-300">
                     </a>
                 </div>
-                <div class="hidden md:flex space-x-8 items-center">
-                    <a href="#concept" class="nav-item text-white/90 hover:text-white transition-colors font-medium">Le Concept</a>
-                    <a href="#menu" class="nav-item text-white/90 hover:text-white transition-colors font-medium">Notre Carte</a>
-                    <a href="#fournisseurs" class="nav-item text-white/90 hover:text-white transition-colors font-medium">Nos Producteurs</a>
-                    <a href="#contact" class="bg-wood-500 hover:bg-wood-800 text-white px-5 py-2.5 rounded-full transition-colors font-medium">Réserver</a>
+                <div class="hidden xl:flex space-x-6 items-center">
+                    <a href="#concept" data-i18n="nav_concept" class="nav-item text-white/90 hover:text-white transition-colors font-medium text-sm">Le Concept</a>
+                    <a href="#menu" data-i18n="nav_menu" class="nav-item text-white/90 hover:text-white transition-colors font-medium text-sm">Notre Carte</a>
+                    <a href="#fournisseurs" data-i18n="nav_prod" class="nav-item text-white/90 hover:text-white transition-colors font-medium text-sm">Producteurs</a>
+                    <a href="#rse" data-i18n="nav_rse" class="nav-item text-white/90 hover:text-white transition-colors font-medium text-sm">RSE</a>
+                    <a href="#galerie" data-i18n="nav_galerie" class="nav-item text-white/90 hover:text-white transition-colors font-medium text-sm">Galerie</a>
+                    <a href="#faq" data-i18n="nav_faq" class="nav-item text-white/90 hover:text-white transition-colors font-medium text-sm">FAQ</a>
+                    
+                    <!-- Sélecteur de Langue (Multilinguisme) -->
+                    <div class="flex items-center gap-2 border-l border-white/20 pl-4 ml-2" id="lang-switcher">
+                        <button onclick="setLang('fr')" data-lang="fr" class="nav-lang text-xl transition-transform hover:scale-110 opacity-100" title="Français">🇫🇷</button>
+                        <button onclick="setLang('en')" data-lang="en" class="nav-lang text-xl transition-transform hover:scale-110 opacity-50 hover:opacity-100 grayscale hover:grayscale-0" title="English">🇬🇧</button>
+                        <button onclick="setLang('es')" data-lang="es" class="nav-lang text-xl transition-transform hover:scale-110 opacity-50 hover:opacity-100 grayscale hover:grayscale-0" title="Español">🇪🇸</button>
+                    </div>
+
+                    <a href="#contact" data-i18n="nav_res" class="bg-wood-500 hover:bg-wood-800 text-white px-5 py-2.5 rounded-full transition-colors font-medium text-sm ml-4">Réserver</a>
                 </div>
                 <!-- Mobile menu button -->
-                <div class="md:hidden flex items-center">
+                <div class="xl:hidden flex items-center">
                     <button id="mobile-menu-btn" class="text-white hover:text-gray-200 focus:outline-none transition-colors">
                         <i data-lucide="menu" class="h-6 w-6"></i>
                     </button>
                 </div>
             </div>
         </div>
-        <!-- Mobile menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 shadow-lg">
-            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <a href="#concept" class="block px-3 py-2 text-gray-600 font-medium">Le Concept</a>
-                <a href="#menu" class="block px-3 py-2 text-gray-600 font-medium">Notre Carte</a>
-                <a href="#fournisseurs" class="block px-3 py-2 text-gray-600 font-medium">Nos Producteurs</a>
-                <a href="#contact" class="block px-3 py-2 text-wood-500 font-bold">Réserver</a>
-            </div>
-        </div>
     </nav>
+
+    <!-- Fullscreen Mobile Menu Overlay -->
+    <div id="mobile-menu" class="hidden fixed inset-0 z-[100] bg-[#fcfbf9] flex-col justify-center items-center transition-opacity duration-300 opacity-0">
+        <button id="close-mobile-menu" class="absolute top-6 right-6 text-wood-900 hover:text-wood-500 p-2 focus:outline-none transition-transform hover:rotate-90">
+            <i data-lucide="x" class="w-8 h-8"></i>
+        </button>
+
+        <img src="https://image.noelshack.com/fichiers/2026/13/5/1774644066-design-sans-titre-2.png" alt="Logo L'Alpage" class="h-16 mb-8 brightness-0">
+
+        <div class="flex flex-col items-center space-y-6 w-full px-6">
+            <a href="#concept" data-i18n="nav_concept" class="mobile-link text-2xl font-serif text-wood-900 hover:text-wood-500 transition-colors">Le Concept</a>
+            <a href="#menu" data-i18n="nav_menu" class="mobile-link text-2xl font-serif text-wood-900 hover:text-wood-500 transition-colors">Notre Carte</a>
+            <a href="#fournisseurs" data-i18n="nav_prod" class="mobile-link text-2xl font-serif text-wood-900 hover:text-wood-500 transition-colors">Nos Producteurs</a>
+            <a href="#rse" data-i18n="nav_rse" class="mobile-link text-2xl font-serif text-wood-900 hover:text-wood-500 transition-colors">Engagement RSE</a>
+            <a href="#galerie" data-i18n="nav_galerie" class="mobile-link text-2xl font-serif text-wood-900 hover:text-wood-500 transition-colors">Galerie</a>
+            <a href="#faq" data-i18n="nav_faq" class="mobile-link text-2xl font-serif text-wood-900 hover:text-wood-500 transition-colors">FAQ</a>
+            
+            <div class="flex gap-6 mt-4 pt-6 border-t border-gray-200 w-1/2 justify-center">
+                <button onclick="setLang('fr')" data-lang="fr" class="mobile-lang text-3xl transition-transform hover:scale-110 opacity-100">🇫🇷</button>
+                <button onclick="setLang('en')" data-lang="en" class="mobile-lang text-3xl transition-transform hover:scale-110 opacity-50 grayscale hover:grayscale-0">🇬🇧</button>
+                <button onclick="setLang('es')" data-lang="es" class="mobile-lang text-3xl transition-transform hover:scale-110 opacity-50 grayscale hover:grayscale-0">🇪🇸</button>
+            </div>
+            
+            <a href="#contact" data-i18n="nav_res_long" class="mobile-link mt-8 bg-wood-900 hover:bg-wood-500 text-white px-10 py-4 rounded-full font-medium shadow-md transition-colors text-lg">Réserver une table</a>
+        </div>
+    </div>
 
     <!-- Hero Section -->
     <section class="bg-hero h-screen flex items-center justify-center pt-20 relative overflow-hidden">
         <div class="text-center px-4 max-w-4xl mx-auto z-10 reveal active">
-            <span class="block text-wood-200 font-medium tracking-[0.2em] uppercase mb-6 text-sm md:text-base">Authenticité & Terroir</span>
+            <span data-i18n="hero_sub" class="block text-wood-200 font-medium tracking-[0.2em] uppercase mb-6 text-sm md:text-base">Authenticité & Terroir</span>
             
             <h1 class="mb-0 flex justify-center">
                 <img src="https://image.noelshack.com/fichiers/2026/13/5/1774644066-design-sans-titre-2.png" alt="L'Alpage de Germ" class="h-48 md:h-64 lg:h-80 w-auto object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-700">
             </h1>
             
-            <p class="text-lg md:text-xl text-gray-100 mb-10 max-w-2xl mx-auto font-light leading-relaxed drop-shadow-md">
+            <p data-i18n="hero_desc" class="text-lg md:text-xl text-gray-100 mb-10 max-w-2xl mx-auto font-light leading-relaxed drop-shadow-md">
                 Une expérience gastronomique de montagne qui éveille les cinq sens. Découvrez une cuisine locale, authentique et de saison au cœur des Pyrénées.
             </p>
             <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
-                <a href="#menu" class="group relative px-8 py-3 overflow-hidden rounded-full bg-white/10 backdrop-blur-sm border border-white/30 hover:bg-white/20 hover:border-white/50 transition-all text-lg font-medium text-white shadow-lg">
-                    <span class="relative z-10 flex items-center gap-2">Découvrir la carte <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i></span>
+                <a href="#menu" class="group relative px-8 py-3 overflow-hidden rounded-full bg-white/10 backdrop-blur-sm border border-white/30 hover:bg-white/20 hover:border-white/50 transition-all text-lg font-medium text-white shadow-lg flex items-center gap-2">
+                    <span data-i18n="hero_btn_menu" class="relative z-10">Découvrir la carte</span> <i data-lucide="arrow-right" class="relative z-10 w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
                 </a>
-                <a href="#contact" class="px-8 py-3 rounded-full bg-wood-500 hover:bg-wood-800 text-white transition-all text-lg font-medium shadow-[0_0_20px_rgba(139,90,43,0.4)] hover:shadow-[0_0_25px_rgba(139,90,43,0.6)] hover:-translate-y-0.5">
+                <a href="#contact" data-i18n="hero_btn_res" class="px-8 py-3 rounded-full bg-wood-500 hover:bg-wood-800 text-white transition-all text-lg font-medium shadow-[0_0_20px_rgba(139,90,43,0.4)] hover:shadow-[0_0_25px_rgba(139,90,43,0.6)] hover:-translate-y-0.5">
                     Réserver une table
                 </a>
             </div>
@@ -146,13 +189,13 @@
         
         <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce-slow opacity-70 hover:opacity-100 transition-opacity">
             <a href="#concept" class="text-white flex flex-col items-center gap-2">
-                <span class="text-xs uppercase tracking-widest font-medium">Découvrir</span>
+                <span data-i18n="hero_scroll" class="text-xs uppercase tracking-widest font-medium">Découvrir</span>
                 <i data-lucide="chevron-down" class="w-6 h-6"></i>
             </a>
         </div>
     </section>
 
-    <!-- Le Concept -->
+    <!-- Le Concept & L'Équipe -->
     <section id="concept" class="py-24 bg-white relative">
         <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none opacity-50">
             <div class="absolute -top-24 -right-24 w-96 h-96 bg-wood-100 rounded-full blur-3xl"></div>
@@ -169,29 +212,44 @@
                 <div class="reveal">
                     <div class="flex items-center gap-3 mb-4">
                         <span class="h-px w-8 bg-wood-500"></span>
-                        <span class="text-wood-500 font-medium uppercase tracking-widest text-sm">Notre Philosophie</span>
+                        <span data-i18n="concept_sub" class="text-wood-500 font-medium uppercase tracking-widest text-sm">Notre Philosophie</span>
                     </div>
-                    <h2 class="font-serif text-4xl lg:text-5xl font-bold text-wood-900 mb-6 leading-tight">Bienvenue en Altitude</h2>
-                    <p class="text-gray-600 text-lg mb-6 leading-relaxed">
+                    <h2 data-i18n="concept_title" class="font-serif text-4xl lg:text-5xl font-bold text-wood-900 mb-6 leading-tight">Bienvenue en Altitude</h2>
+                    <p data-i18n="concept_p1" class="text-gray-600 text-lg mb-6 leading-relaxed">
                         Situé dans le cadre exceptionnel de Germ, notre restaurant est une ode à la montagne. Ici, nous ne proposons pas d'hébergement, mais un voyage culinaire exclusif.
                     </p>
-                    <p class="text-gray-600 text-lg mb-8 leading-relaxed">
-                        Notre approche repose sur le <strong class="text-wood-800">marketing expérientiel</strong> : éveiller vos 5 sens. De l'odeur réconfortante de la raclette en hiver à la fraîcheur d'un gaspacho coloré en été, chaque détail compte. Nous sélectionnons rigoureusement nos produits (Porc Noir de Bigorre, Truite des Pyrénées) pour vous offrir l'authenticité à l'état pur.
+                    <p data-i18n="concept_p2" class="text-gray-600 text-lg mb-8 leading-relaxed">
+                        Notre approche repose sur l'éveil de vos 5 sens. De l'odeur réconfortante de la raclette en hiver à la fraîcheur d'un gaspacho coloré en été, chaque détail compte. Nous sélectionnons rigoureusement nos produits pour vous offrir l'authenticité à l'état pur.
                     </p>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-10">
-                        <div class="flex flex-col gap-3 p-5 rounded-xl bg-[#fcfbf9] border border-gray-100 shadow-sm hover:shadow-md transition-shadow hover:-translate-y-1">
-                            <div class="w-12 h-12 rounded-full bg-wood-100 flex items-center justify-center">
-                                <i data-lucide="utensils-crossed" class="h-6 w-6 text-wood-800"></i>
+                    
+                    <!-- L'Équipe -->
+                    <div class="bg-wood-50 rounded-2xl p-6 border border-wood-100 mb-8 shadow-sm">
+                        <h3 class="font-serif text-xl font-bold text-wood-900 mb-3 flex items-center gap-2">
+                            <i data-lucide="users" class="w-5 h-5 text-wood-500"></i> <span data-i18n="concept_team_title">Une aventure humaine</span>
+                        </h3>
+                        <p data-i18n="concept_team_text" class="text-gray-600 text-sm leading-relaxed">
+                            L'Alpage de Germ, c'est avant tout un projet porté par quatre passionnés de restauration et de terroir : Maxime Reybaud, Agathe Colombain, Klélya Fournier--Le Porhiel et Armin Diaz. Notre volonté ? Vous offrir un moment de partage inoubliable au sommet des Pyrénées.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="flex items-center gap-3 p-4 rounded-xl bg-[#fcfbf9] border border-gray-100 shadow-sm">
+                            <div class="w-10 h-10 rounded-full bg-wood-100 flex items-center justify-center shrink-0">
+                                <i data-lucide="utensils-crossed" class="h-5 w-5 text-wood-800"></i>
                             </div>
-                            <h3 class="font-bold text-gray-900 text-lg">100% Maison</h3>
-                            <p class="text-sm text-gray-500">Des recettes élaborées sur place avec passion et savoir-faire.</p>
+                            <div>
+                                <h3 data-i18n="concept_feat1" class="font-bold text-gray-900 text-sm">100% Maison</h3>
+                                <p data-i18n="concept_feat1_desc" class="text-xs text-gray-500">Recettes élaborées sur place.</p>
+                            </div>
                         </div>
-                        <div class="flex flex-col gap-3 p-5 rounded-xl bg-[#fcfbf9] border border-gray-100 shadow-sm hover:shadow-md transition-shadow hover:-translate-y-1">
-                            <div class="w-12 h-12 rounded-full bg-wood-100 flex items-center justify-center">
-                                <i data-lucide="map-pin" class="h-6 w-6 text-wood-800"></i>
+                        <div class="flex items-center gap-3 p-4 rounded-xl bg-[#fcfbf9] border border-gray-100 shadow-sm">
+                            <div class="w-10 h-10 rounded-full bg-wood-100 flex items-center justify-center shrink-0">
+                                <i data-lucide="map-pin" class="h-5 w-5 text-wood-800"></i>
                             </div>
-                            <h3 class="font-bold text-gray-900 text-lg">Circuit Court</h3>
-                            <p class="text-sm text-gray-500">Privilégiant les artisans locaux des Pyrénées.</p>
+                            <div>
+                                <h3 data-i18n="concept_feat2" class="font-bold text-gray-900 text-sm">Circuit Court</h3>
+                                <p data-i18n="concept_feat2_desc" class="text-xs text-gray-500">Artisans locaux privilégiés.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -204,154 +262,126 @@
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16 reveal">
                 <span class="text-wood-500 font-medium tracking-widest uppercase text-sm flex items-center justify-center gap-2 mb-2">
-                    <i data-lucide="chef-hat" class="w-4 h-4"></i> Notre Offre Gastronomique
+                    <i data-lucide="chef-hat" class="w-4 h-4"></i> <span data-i18n="menu_sub">Notre Offre Gastronomique</span>
                 </span>
-                <h2 class="font-serif text-4xl lg:text-5xl font-bold text-wood-900 mt-2">La Carte de l'Alpage</h2>
+                <h2 data-i18n="menu_title" class="font-serif text-4xl lg:text-5xl font-bold text-wood-900 mt-2">La Carte de l'Alpage</h2>
             </div>
 
             <!-- Les Planches (All Year) -->
-            <div class="mb-20 reveal">
-                <h3 class="font-serif text-2xl text-center text-slate-800 mb-10 flex items-center justify-center gap-4">
-                    <span class="h-px w-16 bg-gradient-to-r from-transparent to-wood-200"></span>
-                    Planches à Partager
-                    <span class="h-px w-16 bg-gradient-to-l from-transparent to-wood-200"></span>
+            <div class="mb-16 reveal">
+                <h3 class="font-serif text-2xl text-center text-slate-800 mb-8 flex items-center justify-center gap-4">
+                    <span class="h-px w-12 sm:w-16 bg-gradient-to-r from-transparent to-wood-200"></span>
+                    <span data-i18n="menu_share">Planches à Partager</span>
+                    <span class="h-px w-12 sm:w-16 bg-gradient-to-l from-transparent to-wood-200"></span>
                 </h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-center group hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-default">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-center group hover:shadow-md transition-all duration-300 cursor-default">
                         <div class="w-full mr-4">
                             <div class="flex justify-between items-baseline mb-1">
-                                <h4 class="font-bold text-lg text-gray-900 group-hover:text-wood-500 transition-colors">Planche Mixte</h4>
+                                <h4 data-i18n="share_mixte" class="font-bold text-lg text-gray-900 group-hover:text-wood-500 transition-colors">Planche Mixte</h4>
                                 <span class="font-bold text-wood-500 whitespace-nowrap">22,00 €</span>
                             </div>
-                            <p class="text-sm text-gray-500 leading-relaxed">L'alliance parfaite entre charcuteries locales et fromages de la vallée.</p>
+                            <p data-i18n="share_mixte_desc" class="text-sm text-gray-500 leading-relaxed">Alliance parfaite charcuteries & fromages de la vallée.</p>
                         </div>
-                        <div class="w-12 h-12 rounded-full bg-wood-50 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                        <div class="w-12 h-12 rounded-full bg-wood-50 flex items-center justify-center flex-shrink-0">
                             <i data-lucide="beef" class="text-wood-500 w-6 h-6"></i>
                         </div>
                     </div>
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-center group hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-default">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-center group hover:shadow-md transition-all duration-300 cursor-default">
                         <div class="w-full mr-4">
                             <div class="flex justify-between items-baseline mb-1">
-                                <h4 class="font-bold text-lg text-gray-900 group-hover:text-wood-500 transition-colors">Planche de Charcuterie</h4>
+                                <h4 data-i18n="share_charc" class="font-bold text-lg text-gray-900 group-hover:text-wood-500 transition-colors">Planche de Charcuterie</h4>
                                 <span class="font-bold text-wood-500 whitespace-nowrap">18,00 €</span>
                             </div>
-                            <p class="text-sm text-gray-500 leading-relaxed">Sélection artisanale (Jambon de pays, saucisson, coppa).</p>
+                            <p data-i18n="share_charc_desc" class="text-sm text-gray-500 leading-relaxed">Sélection artisanale (Jambon, saucisson, coppa).</p>
                         </div>
-                        <div class="w-12 h-12 rounded-full bg-wood-50 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                        <div class="w-12 h-12 rounded-full bg-wood-50 flex items-center justify-center flex-shrink-0">
                             <i data-lucide="beef" class="text-wood-500 w-6 h-6"></i>
                         </div>
                     </div>
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-center group hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-default">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-center group hover:shadow-md transition-all duration-300 cursor-default">
                         <div class="w-full mr-4">
                             <div class="flex justify-between items-baseline mb-1">
-                                <h4 class="font-bold text-lg text-gray-900 group-hover:text-wood-500 transition-colors">Planche de Fromage</h4>
+                                <h4 data-i18n="share_cheese" class="font-bold text-lg text-gray-900 group-hover:text-wood-500 transition-colors">Planche de Fromages</h4>
                                 <span class="font-bold text-wood-500 whitespace-nowrap">16,00 €</span>
                             </div>
-                            <p class="text-sm text-gray-500 leading-relaxed">Assortiment de tomes et fromages affinés des Pyrénées.</p>
+                            <p data-i18n="share_cheese_desc" class="text-sm text-gray-500 leading-relaxed">Assortiment de tomes et fromages affinés des Pyrénées.</p>
                         </div>
-                        <div class="w-12 h-12 rounded-full bg-wood-50 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                        <div class="w-12 h-12 rounded-full bg-wood-50 flex items-center justify-center flex-shrink-0">
                             <i data-lucide="cheese" class="text-wood-500 w-6 h-6"></i>
                         </div>
                     </div>
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-center group hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-default">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-center group hover:shadow-md transition-all duration-300 cursor-default">
                         <div class="w-full mr-4">
                             <div class="flex justify-between items-baseline mb-1">
-                                <h4 class="font-bold text-lg text-gray-900 group-hover:text-wood-500 transition-colors">Planche de Tartinables</h4>
+                                <h4 data-i18n="share_spread" class="font-bold text-lg text-gray-900 group-hover:text-wood-500 transition-colors">Planche de Tartinables</h4>
                                 <span class="font-bold text-wood-500 whitespace-nowrap">12,00 €</span>
                             </div>
-                            <p class="text-sm text-gray-500 leading-relaxed">Rillettes, tapenades et créations végétales du chef.</p>
+                            <p data-i18n="share_spread_desc" class="text-sm text-gray-500 leading-relaxed">Rillettes, tapenades et créations végétales du chef.</p>
                         </div>
-                        <div class="w-12 h-12 rounded-full bg-wood-50 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                        <div class="w-12 h-12 rounded-full bg-wood-50 flex items-center justify-center flex-shrink-0">
                             <i data-lucide="utensils" class="text-wood-500 w-6 h-6"></i>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Saison Tabs -->
-            <div class="flex justify-center mb-16 reveal">
-                <div class="bg-gray-100 p-1 rounded-full inline-flex">
-                    <button onclick="switchTab('ete')" id="btn-ete" class="px-8 py-3 rounded-full text-base font-medium transition-all duration-300 flex items-center gap-2 bg-white text-wood-500 shadow-sm">
-                        <i data-lucide="sun" class="w-5 h-5"></i> Menu d'Été
+            <!-- Menu Tabs Navigation -->
+            <div class="flex justify-center mb-12 reveal">
+                <div class="bg-gray-100 p-1.5 rounded-full inline-flex flex-wrap justify-center gap-1">
+                    <button onclick="switchTab('ete')" id="btn-ete" class="px-5 sm:px-8 py-2.5 rounded-full text-sm sm:text-base font-medium transition-all duration-300 flex items-center gap-2 bg-white text-wood-500 shadow-sm">
+                        <i data-lucide="sun" class="w-4 h-4 sm:w-5 sm:h-5"></i> <span data-i18n="menu_tab1">Menu d'Été</span>
                     </button>
-                    <button onclick="switchTab('hiver')" id="btn-hiver" class="px-8 py-3 rounded-full text-base font-medium transition-all duration-300 flex items-center gap-2 text-gray-500 hover:text-gray-700">
-                        <i data-lucide="snowflake" class="w-5 h-5"></i> Menu d'Hiver
+                    <button onclick="switchTab('hiver')" id="btn-hiver" class="px-5 sm:px-8 py-2.5 rounded-full text-sm sm:text-base font-medium transition-all duration-300 flex items-center gap-2 text-gray-500 hover:text-gray-700">
+                        <i data-lucide="snowflake" class="w-4 h-4 sm:w-5 sm:h-5"></i> <span data-i18n="menu_tab2">Menu d'Hiver</span>
+                    </button>
+                    <button onclick="switchTab('boissons')" id="btn-boissons" class="px-5 sm:px-8 py-2.5 rounded-full text-sm sm:text-base font-medium transition-all duration-300 flex items-center gap-2 text-gray-500 hover:text-gray-700">
+                        <i data-lucide="coffee" class="w-4 h-4 sm:w-5 sm:h-5"></i> <span data-i18n="menu_tab3">Desserts & Boissons</span>
                     </button>
                 </div>
             </div>
 
             <!-- Tab Content: ÉTÉ -->
             <div id="tab-ete" class="block animate-fade-in-up reveal">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
-                    <!-- Entrées Été -->
-                    <div class="bg-white p-8 rounded-3xl shadow-[0_10px_40px_-15px_rgba(0,0,0,0.05)] border border-gray-50">
-                        <h3 class="font-serif text-3xl text-wood-900 mb-8 flex items-center gap-3">
-                            <i data-lucide="leaf" class="text-wood-500"></i> Entrées Estivales
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                    <div class="bg-white p-8 rounded-3xl shadow-[0_5px_30px_-15px_rgba(0,0,0,0.05)] border border-gray-50">
+                        <h3 class="font-serif text-2xl text-wood-900 mb-6 flex items-center gap-3">
+                            <i data-lucide="leaf" class="text-wood-500"></i> <span data-i18n="menu_sum_entree">Entrées Estivales</span>
                         </h3>
-                        <ul class="space-y-6">
-                            <li class="group">
-                                <div class="flex justify-between items-baseline">
-                                    <h4 class="font-bold text-gray-800 group-hover:text-wood-500 transition-colors">Truite des Pyrénées façon gravelax</h4>
-                                    <span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4 opacity-50 transition-opacity group-hover:opacity-100"></span>
-                                    <span class="font-bold text-wood-900 whitespace-nowrap">14,00 €</span>
-                                </div>
-                            </li>
-                            <li class="group">
-                                <div class="flex justify-between items-baseline">
-                                    <h4 class="font-bold text-gray-800 group-hover:text-wood-500 transition-colors">Tomate cœur de bœuf & mozzarella locale</h4>
-                                    <span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4 opacity-50 transition-opacity group-hover:opacity-100"></span>
-                                    <span class="font-bold text-wood-900 whitespace-nowrap">11,00 €</span>
-                                </div>
-                            </li>
-                            <li class="group">
-                                <div class="flex justify-between items-baseline">
-                                    <h4 class="font-bold text-gray-800 group-hover:text-wood-500 transition-colors">Salade de saison (selon arrivage)</h4>
-                                    <span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4 opacity-50 transition-opacity group-hover:opacity-100"></span>
-                                    <span class="font-bold text-wood-900 whitespace-nowrap">7,00 €</span>
-                                </div>
-                            </li>
-                            <li class="group">
-                                <div class="flex justify-between items-baseline">
-                                    <h4 class="font-bold text-gray-800 group-hover:text-wood-500 transition-colors">Gaspacho coloré</h4>
-                                    <span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4 opacity-50 transition-opacity group-hover:opacity-100"></span>
-                                    <span class="font-bold text-wood-900 whitespace-nowrap">7,00 €</span>
-                                </div>
-                            </li>
-                            <li class="group">
-                                <div class="flex justify-between items-baseline">
-                                    <h4 class="font-bold text-gray-800 group-hover:text-wood-500 transition-colors">Salade de lentilles du pays</h4>
-                                    <span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4 opacity-50 transition-opacity group-hover:opacity-100"></span>
-                                    <span class="font-bold text-wood-900 whitespace-nowrap">8,50 €</span>
-                                </div>
-                            </li>
+                        <ul class="space-y-5">
+                            <li class="group"><div class="flex justify-between items-baseline"><h4 data-i18n="sum_entree_1" class="font-bold text-gray-800">Truite façon gravlax</h4><span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4"></span><span class="font-bold text-wood-900">14,00 €</span></div></li>
+                            <li class="group"><div class="flex justify-between items-baseline"><h4 data-i18n="sum_entree_2" class="font-bold text-gray-800">Tomate cœur de bœuf & mozza</h4><span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4"></span><span class="font-bold text-wood-900">11,00 €</span></div></li>
+                            <li class="group"><div class="flex justify-between items-baseline"><h4 data-i18n="sum_entree_3" class="font-bold text-gray-800">Salade de lentilles du pays</h4><span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4"></span><span class="font-bold text-wood-900">8,50 €</span></div></li>
+                            <li class="group"><div class="flex justify-between items-baseline"><h4 data-i18n="sum_entree_4" class="font-bold text-gray-800">Gaspacho coloré</h4><span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4"></span><span class="font-bold text-wood-900">7,00 €</span></div></li>
+                            <li class="group"><div class="flex justify-between items-baseline"><h4 data-i18n="sum_entree_5" class="font-bold text-gray-800">Salade de saison</h4><span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4"></span><span class="font-bold text-wood-900">7,00 €</span></div></li>
                         </ul>
                     </div>
-                    <!-- Plats Été -->
-                    <div class="bg-white p-8 rounded-3xl shadow-[0_10px_40px_-15px_rgba(0,0,0,0.05)] border border-gray-50 flex flex-col">
-                        <h3 class="font-serif text-3xl text-wood-900 mb-8 flex items-center gap-3">
-                            <i data-lucide="utensils" class="text-wood-500"></i> Plats d'Été
+                    <div class="bg-white p-8 rounded-3xl shadow-[0_5px_30px_-15px_rgba(0,0,0,0.05)] border border-gray-50">
+                        <h3 class="font-serif text-2xl text-wood-900 mb-6 flex items-center gap-3">
+                            <i data-lucide="utensils" class="text-wood-500"></i> <span data-i18n="menu_sum_plat">Plats d'Été</span>
                         </h3>
-                        <ul class="space-y-6 flex-grow">
+                        <ul class="space-y-5">
                             <li class="group">
                                 <div class="flex justify-between items-baseline">
-                                    <h4 class="font-bold text-gray-800 group-hover:text-wood-500 transition-colors">Axoa de veau</h4>
-                                    <span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4 opacity-50 transition-opacity group-hover:opacity-100"></span>
-                                    <span class="font-bold text-wood-900 whitespace-nowrap">19,00 €</span>
+                                    <h4 data-i18n="sum_plat_1" class="font-bold text-gray-800">Axoa de veau</h4>
+                                    <span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4"></span>
+                                    <span class="font-bold text-wood-900">19,00 €</span>
                                 </div>
                             </li>
                             <li class="group">
                                 <div class="flex justify-between items-baseline">
-                                    <h4 class="font-bold text-gray-800 group-hover:text-wood-500 transition-colors">Truite des Pyrénées cuite en papillote</h4>
-                                    <span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4 opacity-50 transition-opacity group-hover:opacity-100"></span>
-                                    <span class="font-bold text-wood-900 whitespace-nowrap">21,00 €</span>
+                                    <h4 data-i18n="sum_plat_2" class="font-bold text-gray-800">Truite des Pyrénées en papillote</h4>
+                                    <span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4"></span>
+                                    <span class="font-bold text-wood-900">21,00 €</span>
                                 </div>
                             </li>
                             <li class="group">
                                 <div class="flex justify-between items-baseline">
-                                    <h4 class="font-bold text-gray-800 group-hover:text-wood-500 transition-colors">Assortiment de grillades</h4>
-                                    <span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4 opacity-50 transition-opacity group-hover:opacity-100"></span>
-                                    <span class="font-bold text-wood-900 whitespace-nowrap">26,00 €</span>
+                                    <h4 data-i18n="sum_plat_3" class="font-bold text-gray-800">Assortiment de grillades</h4>
+                                    <span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4"></span>
+                                    <span class="font-bold text-wood-900">26,00 €</span>
                                 </div>
+                                <p data-i18n="sum_plat_3_desc" class="text-xs text-gray-500 mt-1">Porc Noir de Bigorre, Agneau, Brochettes, Ventrèche</p>
                             </li>
                         </ul>
                     </div>
@@ -360,74 +390,76 @@
 
             <!-- Tab Content: HIVER -->
             <div id="tab-hiver" class="hidden animate-fade-in-up reveal">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
-                    <!-- Entrées Hiver -->
-                    <div class="bg-white p-8 rounded-3xl shadow-[0_10px_40px_-15px_rgba(0,0,0,0.05)] border border-gray-50">
-                        <h3 class="font-serif text-3xl text-wood-900 mb-8 flex items-center gap-3">
-                            <i data-lucide="flame" class="text-wood-500"></i> Entrées Réconfortantes
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                    <div class="bg-white p-8 rounded-3xl shadow-[0_5px_30px_-15px_rgba(0,0,0,0.05)] border border-gray-50">
+                        <h3 class="font-serif text-2xl text-wood-900 mb-6 flex items-center gap-3">
+                            <i data-lucide="flame" class="text-wood-500"></i> <span data-i18n="menu_win_entree">Entrées Réconfortantes</span>
                         </h3>
-                        <ul class="space-y-6">
-                            <li class="group">
-                                <div class="flex justify-between items-baseline">
-                                    <h4 class="font-bold text-gray-800 group-hover:text-wood-500 transition-colors">Garbure Pyrénéenne</h4>
-                                    <span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4 opacity-50 transition-opacity group-hover:opacity-100"></span>
-                                    <span class="font-bold text-wood-900 whitespace-nowrap">14,00 €</span>
-                                </div>
-                            </li>
-                            <li class="group">
-                                <div class="flex justify-between items-baseline">
-                                    <h4 class="font-bold text-gray-800 group-hover:text-wood-500 transition-colors">Salade de gésier</h4>
-                                    <span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4 opacity-50 transition-opacity group-hover:opacity-100"></span>
-                                    <span class="font-bold text-wood-900 whitespace-nowrap">11,00 €</span>
-                                </div>
-                            </li>
-                            <li class="group">
-                                <div class="flex justify-between items-baseline">
-                                    <h4 class="font-bold text-gray-800 group-hover:text-wood-500 transition-colors">Pastis gascon salé au boudin noir</h4>
-                                    <span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4 opacity-50 transition-opacity group-hover:opacity-100"></span>
-                                    <span class="font-bold text-wood-900 whitespace-nowrap">8,50 €</span>
-                                </div>
-                            </li>
-                            <li class="group">
-                                <div class="flex justify-between items-baseline">
-                                    <h4 class="font-bold text-gray-800 group-hover:text-wood-500 transition-colors">Velouté de légumes de saisons</h4>
-                                    <span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4 opacity-50 transition-opacity group-hover:opacity-100"></span>
-                                    <span class="font-bold text-wood-900 whitespace-nowrap">7,00 €</span>
-                                </div>
-                            </li>
+                        <ul class="space-y-5">
+                            <li class="group"><div class="flex justify-between items-baseline"><h4 data-i18n="win_entree_1" class="font-bold text-gray-800">Garbure Pyrénéenne</h4><span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4"></span><span class="font-bold text-wood-900">14,00 €</span></div></li>
+                            <li class="group"><div class="flex justify-between items-baseline"><h4 data-i18n="win_entree_2" class="font-bold text-gray-800">Salade de gésiers</h4><span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4"></span><span class="font-bold text-wood-900">11,00 €</span></div></li>
+                            <li class="group"><div class="flex justify-between items-baseline"><h4 data-i18n="win_entree_3" class="font-bold text-gray-800">Pastis gascon salé au boudin</h4><span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4"></span><span class="font-bold text-wood-900">8,50 €</span></div></li>
+                            <li class="group"><div class="flex justify-between items-baseline"><h4 data-i18n="win_entree_4" class="font-bold text-gray-800">Velouté de légumes</h4><span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4"></span><span class="font-bold text-wood-900">7,00 €</span></div></li>
                         </ul>
                     </div>
-                    <!-- Plats Hiver -->
-                    <div class="bg-white p-8 rounded-3xl shadow-[0_10px_40px_-15px_rgba(0,0,0,0.05)] border border-gray-50 flex flex-col">
-                        <h3 class="font-serif text-3xl text-wood-900 mb-8 flex items-center gap-3">
-                            <i data-lucide="utensils" class="text-wood-500"></i> Plats d'Hiver
+                    <div class="bg-white p-8 rounded-3xl shadow-[0_5px_30px_-15px_rgba(0,0,0,0.05)] border border-gray-50">
+                        <h3 class="font-serif text-2xl text-wood-900 mb-6 flex items-center gap-3">
+                            <i data-lucide="utensils" class="text-wood-500"></i> <span data-i18n="menu_win_plat">Plats d'Hiver</span>
                         </h3>
-                        <ul class="space-y-6 flex-grow">
-                            <li class="group">
-                                <div class="flex justify-between items-baseline">
-                                    <h4 class="font-bold text-gray-800 group-hover:text-wood-500 transition-colors">Porc noir de bigorre</h4>
-                                    <span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4 opacity-50 transition-opacity group-hover:opacity-100"></span>
-                                    <span class="font-bold text-wood-900 whitespace-nowrap">26,00 €</span>
-                                </div>
-                            </li>
-                            <li class="group">
-                                <div class="flex justify-between items-baseline">
-                                    <h4 class="font-bold text-gray-800 group-hover:text-wood-500 transition-colors">Raclette à volonté</h4>
-                                    <span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4 opacity-50 transition-opacity group-hover:opacity-100"></span>
-                                    <span class="font-bold text-wood-900 whitespace-nowrap">25,00 €</span>
-                                </div>
-                            </li>
-                            <li class="group">
-                                <div class="flex justify-between items-baseline">
-                                    <h4 class="font-bold text-gray-800 group-hover:text-wood-500 transition-colors">Pot-au-feu traditionnel</h4>
-                                    <span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4 opacity-50 transition-opacity group-hover:opacity-100"></span>
-                                    <span class="font-bold text-wood-900 whitespace-nowrap">19,00 €</span>
-                                </div>
-                            </li>
+                        <ul class="space-y-5">
+                            <li class="group"><div class="flex justify-between items-baseline"><h4 data-i18n="win_plat_1" class="font-bold text-gray-800">Porc noir de Bigorre</h4><span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4"></span><span class="font-bold text-wood-900">26,00 €</span></div></li>
+                            <li class="group"><div class="flex justify-between items-baseline"><h4 data-i18n="win_plat_2" class="font-bold text-gray-800">Raclette à volonté</h4><span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4"></span><span class="font-bold text-wood-900">25,00 €</span></div></li>
+                            <li class="group"><div class="flex justify-between items-baseline"><h4 data-i18n="win_plat_3" class="font-bold text-gray-800">Pot-au-feu traditionnel</h4><span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4"></span><span class="font-bold text-wood-900">19,00 €</span></div></li>
                         </ul>
                     </div>
                 </div>
             </div>
+
+            <!-- Tab Content: DESSERTS & BOISSONS -->
+            <div id="tab-boissons" class="hidden animate-fade-in-up reveal">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                    <!-- Desserts -->
+                    <div class="bg-white p-8 rounded-3xl shadow-[0_5px_30px_-15px_rgba(0,0,0,0.05)] border border-gray-50">
+                        <h3 class="font-serif text-2xl text-wood-900 mb-6 flex items-center gap-3">
+                            <i data-lucide="cake" class="text-wood-500"></i> <span data-i18n="menu_dessert">Nos Douceurs</span>
+                        </h3>
+                        <ul class="space-y-5">
+                            <li class="group"><div class="flex justify-between items-baseline"><h4 data-i18n="dessert_1" class="font-bold text-gray-800">Dessert de notre cheffe</h4><span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4"></span><span class="font-bold text-wood-900">15,00 €</span></div></li>
+                            <li class="group"><div class="flex justify-between items-baseline"><h4 data-i18n="dessert_2" class="font-bold text-gray-800">Café gourmand</h4><span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4"></span><span class="font-bold text-wood-900">10,00 €</span></div></li>
+                            <li class="group"><div class="flex justify-between items-baseline"><h4 data-i18n="dessert_3" class="font-bold text-gray-800">Moelleux chocolat & crème</h4><span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4"></span><span class="font-bold text-wood-900">9,00 €</span></div></li>
+                            <li class="group"><div class="flex justify-between items-baseline"><h4 data-i18n="dessert_4" class="font-bold text-gray-800">Crumble de fruits de saison</h4><span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4"></span><span class="font-bold text-wood-900">9,00 €</span></div></li>
+                            <li class="group"><div class="flex justify-between items-baseline"><h4 data-i18n="dessert_5" class="font-bold text-gray-800">Assiette de fromage</h4><span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4"></span><span class="font-bold text-wood-900">8,00 €</span></div></li>
+                            <li class="group"><div class="flex justify-between items-baseline"><h4 data-i18n="dessert_6" class="font-bold text-gray-800">Coupe de fruits de saison</h4><span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4"></span><span class="font-bold text-wood-900">7,00 €</span></div></li>
+                            <li class="group"><div class="flex justify-between items-baseline"><h4 data-i18n="dessert_7" class="font-bold text-gray-800">Glaces artisanales</h4><span class="flex-grow border-b-2 border-dotted border-gray-200 mx-4"></span><span class="font-bold text-wood-900">6,00 €</span></div></li>
+                        </ul>
+                    </div>
+                    <!-- Boissons -->
+                    <div class="bg-white p-8 rounded-3xl shadow-[0_5px_30px_-15px_rgba(0,0,0,0.05)] border border-gray-50 flex flex-col">
+                        <h3 class="font-serif text-2xl text-wood-900 mb-6 flex items-center gap-3">
+                            <i data-lucide="wine" class="text-wood-500"></i> <span data-i18n="menu_drinks">Caves & Boissons Locales</span>
+                        </h3>
+                        <div class="space-y-6">
+                            <div>
+                                <h4 data-i18n="drink_beer" class="font-bold text-wood-800 mb-2 uppercase text-xs tracking-widest">Bières Artisanales</h4>
+                                <p data-i18n="drink_beer_desc" class="text-sm text-gray-600">La Nestoise Ambrée (Jean Brasse), La Nestoise Blonde (Brasserie des Pics), La Rousse, La Blanche.</p>
+                            </div>
+                            <div>
+                                <h4 data-i18n="drink_wine" class="font-bold text-wood-800 mb-2 uppercase text-xs tracking-widest">Vins du Terroir</h4>
+                                <p data-i18n="drink_wine_desc" class="text-sm text-gray-600">AOC Pacherenc du Vic Bilh & AOC Madiran (Domaine du Moulié), IGP Roussanne Cave de Cruet.</p>
+                            </div>
+                            <div>
+                                <h4 data-i18n="drink_spirit" class="font-bold text-wood-800 mb-2 uppercase text-xs tracking-widest">Apéritifs & Digestifs</h4>
+                                <p data-i18n="drink_spirit_desc" class="text-sm text-gray-600">Pastis artisanal basque Odeia (Egiazki), Armagnac Duc de Camilhac, Poire Williams Saint-Florian.</p>
+                            </div>
+                            <div>
+                                <h4 data-i18n="drink_soft" class="font-bold text-wood-800 mb-2 uppercase text-xs tracking-widest">Sans Alcool</h4>
+                                <p data-i18n="drink_soft_desc" class="text-sm text-gray-600">Mountain cola, Jus artisanaux, Thés et Infusions Bio "Destination Premium".</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </section>
 
@@ -441,16 +473,14 @@
                 <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-wood-500/20 backdrop-blur-sm border border-wood-500/30 mb-6">
                     <i data-lucide="award" class="h-8 w-8 text-wood-200"></i>
                 </div>
-                <h2 class="font-serif text-4xl lg:text-5xl font-bold mb-6 text-white drop-shadow-md">L'Excellence de nos Producteurs</h2>
-                <p class="text-gray-300 text-lg max-w-2xl mx-auto leading-relaxed">Parce qu'une grande cuisine ne peut exister sans d'excellents produits, nous travaillons en étroite collaboration avec les artisans de notre région.</p>
+                <h2 data-i18n="prod_title" class="font-serif text-4xl lg:text-5xl font-bold mb-6 text-white drop-shadow-md">L'Excellence de nos Producteurs</h2>
+                <p data-i18n="prod_desc" class="text-gray-300 text-lg max-w-2xl mx-auto leading-relaxed">Parce qu'une grande cuisine ne peut exister sans d'excellents produits, nous travaillons en étroite collaboration avec les artisans de notre région.</p>
             </div>
             
             <div class="relative max-w-6xl mx-auto px-12 reveal">
-                <!-- Carousel Container -->
                 <div class="overflow-hidden relative" id="carousel-container">
                     <div class="flex flex-nowrap transition-transform duration-500 ease-in-out" id="carousel-track">
-                        
-                        <!-- Slide 1: Pierre Oteiza -->
+                        <!-- Slide 1 -->
                         <div class="w-full sm:w-1/2 lg:w-1/3 flex-shrink-0 px-4">
                             <div class="glass-card p-8 rounded-2xl h-full flex flex-col group hover:-translate-y-2 transition-transform duration-300">
                                 <div class="flex items-center gap-4 mb-4">
@@ -462,11 +492,10 @@
                                         <p class="text-xs text-wood-200 uppercase tracking-widest font-medium">Les Aldudes</p>
                                     </div>
                                 </div>
-                                <p class="text-gray-300 leading-relaxed mt-4 flex-grow text-sm">Éleveur-artisan historique, fournisseur de nos charcuteries d'exception : Saucisson, Jambon de pays et Chorizo. Un savoir-faire unique transmis de génération en génération.</p>
+                                <p data-i18n="prod_oteiza" class="text-gray-300 leading-relaxed mt-4 flex-grow text-sm">Éleveur-artisan historique, fournisseur de nos charcuteries d'exception. Un savoir-faire unique transmis de génération en génération.</p>
                             </div>
                         </div>
-
-                        <!-- Slide 2: Pierre Sajous -->
+                        <!-- Slide 2 -->
                         <div class="w-full sm:w-1/2 lg:w-1/3 flex-shrink-0 px-4">
                             <div class="glass-card p-8 rounded-2xl h-full flex flex-col group hover:-translate-y-2 transition-transform duration-300">
                                 <div class="flex items-center gap-4 mb-4">
@@ -478,11 +507,10 @@
                                         <p class="text-xs text-wood-200 uppercase tracking-widest font-medium">Beaucens</p>
                                     </div>
                                 </div>
-                                <p class="text-gray-300 leading-relaxed mt-4 flex-grow text-sm">Partenaire de confiance pour notre Coppa, Pâté de campagne et Rillettes de canard. La tradition charcutière pyrénéenne magnifiée dans chaque bouchée.</p>
+                                <p data-i18n="prod_sajous" class="text-gray-300 leading-relaxed mt-4 flex-grow text-sm">Partenaire de confiance para notre Coppa, Pâté de campagne et Rillettes de canard. La tradition charcutière pyrénéenne.</p>
                             </div>
                         </div>
-
-                        <!-- Slide 3: Brasserie des Pics -->
+                        <!-- Slide 3 -->
                         <div class="w-full sm:w-1/2 lg:w-1/3 flex-shrink-0 px-4">
                             <div class="glass-card p-8 rounded-2xl h-full flex flex-col group hover:-translate-y-2 transition-transform duration-300">
                                 <div class="flex items-center gap-4 mb-4">
@@ -494,11 +522,10 @@
                                         <p class="text-xs text-wood-200 uppercase tracking-widest font-medium">Hautes-Pyrénées</p>
                                     </div>
                                 </div>
-                                <p class="text-gray-300 leading-relaxed mt-4 flex-grow text-sm">Créateurs de bières artisanales locales de caractère, dont notre incontournable "La Nestoise Blonde", brassée avec l'eau pure de nos montagnes.</p>
+                                <p data-i18n="prod_pics" class="text-gray-300 leading-relaxed mt-4 flex-grow text-sm">Créateurs de bières artisanales locales de caractère, dont notre incontournable "La Nestoise Blonde", brassée avec l'eau de nos montagnes.</p>
                             </div>
                         </div>
-
-                        <!-- Slide 4: Domaine du Moulié -->
+                        <!-- Slide 4 -->
                         <div class="w-full sm:w-1/2 lg:w-1/3 flex-shrink-0 px-4">
                             <div class="glass-card p-8 rounded-2xl h-full flex flex-col group hover:-translate-y-2 transition-transform duration-300">
                                 <div class="flex items-center gap-4 mb-4">
@@ -510,11 +537,10 @@
                                         <p class="text-xs text-wood-200 uppercase tracking-widest font-medium">Cannet</p>
                                     </div>
                                 </div>
-                                <p class="text-gray-300 leading-relaxed mt-4 flex-grow text-sm">Domaine viticole d'exception de notre carte, produisant nos superbes vins AOC Madiran et Pacherenc du Vic Bilh pour sublimer notre Porc noir de Bigorre.</p>
+                                <p data-i18n="prod_moulie" class="text-gray-300 leading-relaxed mt-4 flex-grow text-sm">Domaine viticole d'exception, produisant nos superbes vins AOC Madiran et Pacherenc du Vic Bilh pour sublimer nos viandes.</p>
                             </div>
                         </div>
-
-                        <!-- Slide 5: Brasserie Jean Brasse -->
+                        <!-- Slide 5 -->
                         <div class="w-full sm:w-1/2 lg:w-1/3 flex-shrink-0 px-4">
                             <div class="glass-card p-8 rounded-2xl h-full flex flex-col group hover:-translate-y-2 transition-transform duration-300">
                                 <div class="flex items-center gap-4 mb-4">
@@ -522,15 +548,14 @@
                                         <i data-lucide="glass-water" class="w-6 h-6 text-wood-200"></i>
                                     </div>
                                     <div>
-                                        <h3 class="font-serif text-xl font-bold text-white">Brasserie Jean Brasse</h3>
+                                        <h3 class="font-serif text-xl font-bold text-white">Jean Brasse</h3>
                                         <p class="text-xs text-wood-200 uppercase tracking-widest font-medium">Gers</p>
                                     </div>
                                 </div>
-                                <p class="text-gray-300 leading-relaxed mt-4 flex-grow text-sm">Artisans brasseurs passionnés du Gers, à l'origine de notre "Nestoise Ambrée". Une bière ronde et généreuse parfaite pour accompagner nos plats d'hiver.</p>
+                                <p data-i18n="prod_brasse" class="text-gray-300 leading-relaxed mt-4 flex-grow text-sm">Artisans brasseurs passionnés du Gers, à l'origine de notre "Nestoise Ambrée". Une bière ronde et généreuse.</p>
                             </div>
                         </div>
-
-                        <!-- Slide 6: Egiazki -->
+                        <!-- Slide 6 -->
                         <div class="w-full sm:w-1/2 lg:w-1/3 flex-shrink-0 px-4">
                             <div class="glass-card p-8 rounded-2xl h-full flex flex-col group hover:-translate-y-2 transition-transform duration-300">
                                 <div class="flex items-center gap-4 mb-4">
@@ -542,10 +567,9 @@
                                         <p class="text-xs text-wood-200 uppercase tracking-widest font-medium">Pays Basque</p>
                                     </div>
                                 </div>
-                                <p class="text-gray-300 leading-relaxed mt-4 flex-grow text-sm">Producteurs engagés du célèbre Pastis artisanal basque "Odeia" et d'autres liqueurs locales, pour une mise en bouche rafraîchissante et authentique.</p>
+                                <p data-i18n="prod_egiazki" class="text-gray-300 leading-relaxed mt-4 flex-grow text-sm">Producteurs engagés del célèbre Pastis artisanal basque "Odeia" et d'autres liqueurs locales, pour un apéritif authentique.</p>
                             </div>
                         </div>
-
                     </div>
                 </div>
 
@@ -560,36 +584,208 @@
         </div>
     </section>
 
+    <!-- Engagement RSE -->
+    <section id="rse" class="py-24 bg-white relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <span data-i18n="rse_sub" class="text-wood-500 font-medium tracking-widest uppercase text-sm mb-2 block">Préserver nos montagnes</span>
+                <h2 data-i18n="rse_title" class="font-serif text-4xl lg:text-5xl font-bold text-wood-900 mb-6">Notre Engagement RSE</h2>
+                <p data-i18n="rse_desc" class="text-gray-600 text-lg max-w-3xl mx-auto leading-relaxed">À L'Alpage de Germ, nous sommes conscients de la fragilité de notre environnement montagnard. Notre démarche de Responsabilité Sociétale des Entreprises guide chacune de nos décisions au quotidien.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 reveal">
+                <!-- RSE Card 1 -->
+                <div class="bg-[#fcfbf9] p-8 rounded-3xl border border-gray-100 shadow-[0_5px_20px_-15px_rgba(0,0,0,0.1)] hover:-translate-y-2 transition-transform duration-300">
+                    <div class="w-14 h-14 rounded-2xl bg-wood-100 flex items-center justify-center mb-6">
+                        <i data-lucide="leaf" class="w-7 h-7 text-wood-500"></i>
+                    </div>
+                    <h3 data-i18n="rse_card1" class="font-serif text-2xl font-bold text-wood-900 mb-4">Empreinte Écologique</h3>
+                    <p data-i18n="rse_card1_desc" class="text-gray-600 leading-relaxed text-sm">Réduction maximale de notre impact carbone. Nous respectons une saisonnalité stricte dans nos menus et limitons les transports. Nos déchets organiques sont triés et valorisés pour limiter notre impact sur le village.</p>
+                </div>
+                <!-- RSE Card 2 -->
+                <div class="bg-[#fcfbf9] p-8 rounded-3xl border border-gray-100 shadow-[0_5px_20px_-15px_rgba(0,0,0,0.1)] hover:-translate-y-2 transition-transform duration-300">
+                    <div class="w-14 h-14 rounded-2xl bg-wood-100 flex items-center justify-center mb-6">
+                        <i data-lucide="heart-handshake" class="w-7 h-7 text-wood-500"></i>
+                    </div>
+                    <h3 data-i18n="rse_card2" class="font-serif text-2xl font-bold text-wood-900 mb-4">Économie Solidaire</h3>
+                    <p data-i18n="rse_card2_desc" class="text-gray-600 leading-relaxed text-sm">Nos fournisseurs ne sont pas que des prestataires, ce sont nos partenaires. En achetant en direct et en circuit court, nous garantissons une juste rémunération aux agriculteurs et artisans des Hautes-Pyrénées.</p>
+                </div>
+                <!-- RSE Card 3 -->
+                <div class="bg-[#fcfbf9] p-8 rounded-3xl border border-gray-100 shadow-[0_5px_20px_-15px_rgba(0,0,0,0.1)] hover:-translate-y-2 transition-transform duration-300">
+                    <div class="w-14 h-14 rounded-2xl bg-wood-100 flex items-center justify-center mb-6">
+                        <i data-lucide="users" class="w-7 h-7 text-wood-500"></i>
+                    </div>
+                    <h3 data-i18n="rse_card3" class="font-serif text-2xl font-bold text-wood-900 mb-4">Bien-être Humain</h3>
+                    <p data-i18n="rse_card3_desc" class="text-gray-600 leading-relaxed text-sm">Le pilier social est au cœur de notre aventure. Nous veillons à offrir un cadre de travail sain, respectueux et stimulant à nos collaborateurs, car une équipe épanouie est la clé d'un accueil authentique et chaleureux.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Avis Clients (Preuve Sociale) -->
+    <section class="py-20 bg-wood-50 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 reveal">
+                <h2 data-i18n="avis_title" class="font-serif text-3xl lg:text-4xl font-bold text-wood-900 mb-4">Ce qu'ils en pensent</h2>
+                <div class="flex justify-center gap-1 text-wood-500 mb-4">
+                    <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                    <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                    <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                    <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                    <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                </div>
+                <p data-i18n="avis_desc" class="text-gray-600">Note de 4.9/5 basée sur plus de 150 avis</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 reveal">
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+                    <p data-i18n="avis_1" class="text-gray-600 italic mb-6">"Une expérience inoubliable ! La raclette avec le Porc Noir de Bigorre après une bonne journée dans les Pyrénées est un pur bonheur. Équipe très souriante."</p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-full bg-wood-200 text-wood-800 font-bold flex items-center justify-center">M</div>
+                        <div>
+                            <h4 class="font-bold text-gray-900 text-sm">Mathieu D.</h4>
+                            <span data-i18n="avis_d1" class="text-xs text-gray-500">Il y a 2 semaines</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+                    <p data-i18n="avis_2" class="text-gray-600 italic mb-6">"Le concept des 5 sens est bien là. La décoration, l'odeur du feu, et les plats faits maison nous ont fait voyager. Coup de cœur pour la truite en gravlax."</p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-full bg-wood-200 text-wood-800 font-bold flex items-center justify-center">S</div>
+                        <div>
+                            <h4 class="font-bold text-gray-900 text-sm">Sophie R.</h4>
+                            <span data-i18n="avis_d2" class="text-xs text-gray-500">Avis certifié</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+                    <p data-i18n="avis_3" class="text-gray-600 italic mb-6">"Tout était parfait : l'ambiance au coin du feu, le service et le repas ! Seul petit bémol, le prix des bouteilles de vin nous a semblé un peu élevé, mais la qualité était bien au rendez-vous."</p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-full bg-wood-200 text-wood-800 font-bold flex items-center justify-center">J</div>
+                        <div>
+                            <h4 class="font-bold text-gray-900 text-sm">Julien M.</h4>
+                            <span data-i18n="avis_d3" class="text-xs text-gray-500">Il y a 1 mois</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Galerie Photos -->
+    <section id="galerie" class="py-24 bg-[#fcfbf9]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <span data-i18n="gal_sub" class="text-wood-500 font-medium tracking-widest uppercase text-sm mb-2 block">En images</span>
+                <h2 data-i18n="gal_title" class="font-serif text-4xl lg:text-5xl font-bold text-wood-900 mb-6">L'Atmosphère de l'Alpage</h2>
+                <p data-i18n="gal_desc" class="text-gray-600 text-lg max-w-2xl mx-auto leading-relaxed">Découvrez la chaleur de notre salle, l'authenticité de notre établissement et les moments de partage qui font l'âme de notre restaurant d'altitude.</p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 reveal">
+                <div class="col-span-2 row-span-2 overflow-hidden rounded-2xl relative group">
+                    <img src="https://image.noelshack.com/fichiers/2026/15/2/1775552613-gemini-generated-image-wg7of0wg7of0wg7o-1.jpg" alt="Feu de cheminée" class="w-full h-full object-cover aspect-square sm:aspect-auto sm:h-full group-hover:scale-110 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                        <span data-i18n="gal_item1" class="text-white font-serif text-xl">Chaleur & Convivialité</span>
+                    </div>
+                </div>
+                <div class="overflow-hidden rounded-2xl relative group">
+                    <img src="https://image.noelshack.com/fichiers/2026/15/2/1775552276-screenshot-from-2026-04-07-10-57-39.png" alt="Burger pyrénéen" class="w-full h-full object-cover aspect-square group-hover:scale-110 transition-transform duration-700">
+                </div>
+                <div class="overflow-hidden rounded-2xl relative group">
+                    <img src="https://image.noelshack.com/fichiers/2026/15/2/1775552679-screenshot-from-2026-04-07-10-45-27.png" alt="Grillades" class="w-full h-full object-cover aspect-square group-hover:scale-110 transition-transform duration-700">
+                </div>
+                <div class="overflow-hidden rounded-2xl relative group">
+                    <img src="https://image.noelshack.com/fichiers/2026/15/2/1775553072-gemini-generated-image-i0z4tui0z4tui0z4-1.jpg" alt="Planche de fromages" class="w-full h-full object-cover aspect-square group-hover:scale-110 transition-transform duration-700">
+                </div>
+                <div class="overflow-hidden rounded-2xl relative group">
+                    <img src="https://image.noelshack.com/fichiers/2026/15/2/1775553022-gemini-generated-image-wrwne1wrwne1wrwn-1.jpg" alt="Verre de vin" class="w-full h-full object-cover aspect-square group-hover:scale-110 transition-transform duration-700">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section FAQ -->
+    <section id="faq" class="py-24 bg-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 reveal">
+            <div class="text-center mb-12">
+                <span data-i18n="faq_sub" class="text-wood-500 font-medium tracking-widest uppercase text-sm mb-2 block">Infos Pratiques</span>
+                <h2 data-i18n="faq_title" class="font-serif text-3xl lg:text-4xl font-bold text-wood-900">Questions Fréquentes</h2>
+            </div>
+            
+            <div class="space-y-4">
+                <!-- Question 1 -->
+                <div class="border border-gray-100 rounded-2xl bg-[#fcfbf9] overflow-hidden">
+                    <button class="w-full px-6 py-5 text-left flex justify-between items-center focus:outline-none" onclick="toggleFaq(this)">
+                        <span data-i18n="faq_q1" class="font-bold text-gray-900 text-lg">Êtes-vous ouverts toute l'année ?</span>
+                        <i data-lucide="chevron-down" class="w-5 h-5 text-wood-500 faq-icon"></i>
+                    </button>
+                    <div class="faq-answer px-6 text-gray-600">
+                        <p data-i18n="faq_a1" class="pb-5">Nous fonctionnons selon une forte saisonnalité : une saison d'hiver (pour profiter des plats réconfortants et de l'ambiance chalet) et une saison d'été. Nous sommes généralement fermés durant les intersaisons (automne/printemps).</p>
+                    </div>
+                </div>
+                <!-- Question 2 -->
+                <div class="border border-gray-100 rounded-2xl bg-[#fcfbf9] overflow-hidden">
+                    <button class="w-full px-6 py-5 text-left flex justify-between items-center focus:outline-none" onclick="toggleFaq(this)">
+                        <span data-i18n="faq_q2" class="font-bold text-gray-900 text-lg">Comment accéder au restaurant l'hiver ?</span>
+                        <i data-lucide="chevron-down" class="w-5 h-5 text-wood-500 faq-icon"></i>
+                    </button>
+                    <div class="faq-answer px-6 text-gray-600">
+                        <p data-i18n="faq_a2" class="pb-5">Le village de Germ est accessible en voiture. Cependant, durant la saison hivernale, les équipements spéciaux (pneus neige ou chaînes) sont fortement recommandés, voire obligatoires selon la réglementation et la météo du jour.</p>
+                    </div>
+                </div>
+                <!-- Question 3 -->
+                <div class="border border-gray-100 rounded-2xl bg-[#fcfbf9] overflow-hidden">
+                    <button class="w-full px-6 py-5 text-left flex justify-between items-center focus:outline-none" onclick="toggleFaq(this)">
+                        <span data-i18n="faq_q3" class="font-bold text-gray-900 text-lg">Proposez-vous des options végétariennes ?</span>
+                        <i data-lucide="chevron-down" class="w-5 h-5 text-wood-500 faq-icon"></i>
+                    </button>
+                    <div class="faq-answer px-6 text-gray-600">
+                        <p data-i18n="faq_a3" class="pb-5">Oui, bien sûr. Notre carte inclut des planches de fromages, des planches de tartinables, des salades de saison et de délicieux veloutés. Notre équipe en cuisine peut également adapter certains plats sur simple demande lors de votre réservation.</p>
+                    </div>
+                </div>
+                <!-- Question 4 -->
+                <div class="border border-gray-100 rounded-2xl bg-[#fcfbf9] overflow-hidden">
+                    <button class="w-full px-6 py-5 text-left flex justify-between items-center focus:outline-none" onclick="toggleFaq(this)">
+                        <span data-i18n="faq_q4" class="font-bold text-gray-900 text-lg">Acceptez-vous les chiens ?</span>
+                        <i data-lucide="chevron-down" class="w-5 h-5 text-wood-500 faq-icon"></i>
+                    </button>
+                    <div class="faq-answer px-6 text-gray-600">
+                        <p data-i18n="faq_a4" class="pb-5">Nos amis les chiens sont les bienvenus sur notre terrasse, et tolérés en salle à condition qu'ils soient calmes, propres et tenus en laisse pour le confort de l'ensemble de nos convives.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Contact & Réservation -->
-    <section id="contact" class="py-24 bg-white relative">
+    <section id="contact" class="py-24 bg-[#fcfbf9] relative">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                 <!-- Form & Info -->
                 <div class="reveal">
-                    <span class="text-wood-500 font-medium tracking-widest uppercase text-sm mb-2 block">Nous rencontrer</span>
-                    <h2 class="font-serif text-4xl lg:text-5xl font-bold text-wood-900 mb-6">Réserver une table</h2>
-                    <p class="text-gray-600 mb-10 text-lg leading-relaxed">Nous vous conseillons de réserver votre table à l'avance, particulièrement en haute saison (été et hiver).</p>
+                    <span data-i18n="contact_sub" class="text-wood-500 font-medium tracking-widest uppercase text-sm mb-2 block">Nous rencontrer</span>
+                    <h2 data-i18n="contact_title" class="font-serif text-4xl lg:text-5xl font-bold text-wood-900 mb-6">Réserver une table</h2>
+                    <p data-i18n="contact_desc" class="text-gray-600 mb-10 text-lg leading-relaxed">Nous vous conseillons de réserver votre table à l'avance, particulièrement en haute saison (été et hiver).</p>
                     
-                    <!-- Modified Form with proper UI success message instead of alert() -->
-                    <form id="booking-form" class="space-y-6 mb-12 bg-[#fcfbf9] p-8 rounded-3xl border border-gray-100 shadow-lg shadow-gray-200/50">
+                    <form id="booking-form" class="space-y-6 mb-12 bg-white p-8 rounded-3xl border border-gray-100 shadow-lg shadow-gray-200/50">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                             <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">Nom complet</label>
-                                <input type="text" class="w-full px-5 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-wood-500/50 focus:border-wood-500 outline-none transition-all shadow-sm" placeholder="Votre nom" required>
+                                <label data-i18n="form_name" class="block text-sm font-semibold text-gray-700 mb-2">Nom complet</label>
+                                <input type="text" class="w-full px-5 py-3 bg-[#fcfbf9] border border-gray-200 rounded-xl focus:ring-2 focus:ring-wood-500/50 focus:border-wood-500 outline-none transition-all shadow-sm" required>
                             </div>
                             <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">Téléphone</label>
-                                <input type="tel" class="w-full px-5 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-wood-500/50 focus:border-wood-500 outline-none transition-all shadow-sm" placeholder="06 00 00 00 00" required>
+                                <label data-i18n="form_phone" class="block text-sm font-semibold text-gray-700 mb-2">Téléphone</label>
+                                <input type="tel" class="w-full px-5 py-3 bg-[#fcfbf9] border border-gray-200 rounded-xl focus:ring-2 focus:ring-wood-500/50 focus:border-wood-500 outline-none transition-all shadow-sm" required>
                             </div>
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                             <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">Date souhaitée</label>
-                                <input type="date" class="w-full px-5 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-wood-500/50 focus:border-wood-500 outline-none transition-all shadow-sm" required>
+                                <label data-i18n="form_date" class="block text-sm font-semibold text-gray-700 mb-2">Date souhaitée</label>
+                                <input type="date" class="w-full px-5 py-3 bg-[#fcfbf9] border border-gray-200 rounded-xl focus:ring-2 focus:ring-wood-500/50 focus:border-wood-500 outline-none transition-all shadow-sm" required>
                             </div>
                             <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">Nombre de convives</label>
-                                <select class="w-full px-5 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-wood-500/50 focus:border-wood-500 outline-none transition-all shadow-sm appearance-none">
+                                <label data-i18n="form_guests" class="block text-sm font-semibold text-gray-700 mb-2">Nombre de convives</label>
+                                <select class="w-full px-5 py-3 bg-[#fcfbf9] border border-gray-200 rounded-xl focus:ring-2 focus:ring-wood-500/50 focus:border-wood-500 outline-none transition-all shadow-sm appearance-none">
                                     <option>2 personnes</option>
                                     <option>3 personnes</option>
                                     <option>4 personnes</option>
@@ -599,11 +795,10 @@
                             </div>
                         </div>
                         <button type="submit" class="w-full bg-wood-900 hover:bg-wood-500 text-white font-medium py-4 rounded-xl transition-colors mt-2 flex items-center justify-center gap-2 shadow-md">
-                            Confirmer la demande <i data-lucide="send" class="w-4 h-4"></i>
+                            <span data-i18n="form_btn">Confirmer la demande</span> <i data-lucide="send" class="w-4 h-4"></i>
                         </button>
                     </form>
 
-                    <!-- Success Message (Hidden by default) -->
                     <div id="form-success" class="hidden mb-12 bg-green-50 p-8 rounded-3xl border border-green-200 shadow-lg flex-col items-center justify-center text-center gap-4">
                         <i data-lucide="check-circle" class="w-12 h-12 text-green-500"></i>
                         <h3 class="font-serif text-2xl font-bold text-green-800">Merci !</h3>
@@ -616,17 +811,8 @@
                                 <i data-lucide="map-pin" class="h-6 w-6 text-wood-500"></i>
                             </div>
                             <div>
-                                <h4 class="font-bold text-gray-900 text-lg mb-1">Adresse</h4>
-                                <p class="text-gray-600 leading-relaxed">Village de Germ, 65240 Hautes-Pyrénées<br><span class="text-sm italic text-gray-500">(Restaurant de montagne, pas d'hébergement)</span></p>
-                            </div>
-                        </div>
-                        <div class="flex items-start gap-5">
-                            <div class="w-12 h-12 rounded-full bg-wood-50 flex items-center justify-center flex-shrink-0">
-                                <i data-lucide="clock" class="h-6 w-6 text-wood-500"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-gray-900 text-lg mb-1">Horaires d'ouverture</h4>
-                                <p class="text-gray-600 leading-relaxed">Service du Midi : 12h00 - 14h30<br>Service du Soir : 19h00 - 22h00</p>
+                                <h4 data-i18n="contact_address" class="font-bold text-gray-900 text-lg mb-1">Adresse</h4>
+                                <p class="text-gray-600 leading-relaxed">Village de Germ, 65240 Hautes-Pyrénées<br><span data-i18n="contact_no_hotel" class="text-sm italic text-gray-500">(Restaurant de montagne, pas d'hébergement)</span></p>
                             </div>
                         </div>
                     </div>
@@ -650,37 +836,93 @@
     <!-- Footer -->
     <footer class="bg-slate-900 text-gray-400 py-16 border-t border-slate-800 relative overflow-hidden">
         <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-wood-500 to-transparent opacity-50"></div>
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-12 text-center md:text-left relative z-10">
-            <div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-12 text-center md:text-left relative z-10">
+            <div class="md:col-span-1">
                 <a href="#" class="font-serif text-3xl font-bold text-white mb-6 flex items-center justify-center md:justify-start gap-3 hover:text-wood-200 transition-colors">
-                    <i data-lucide="mountain" class="h-8 w-8 text-wood-500"></i>
-                    L'Alpage
+                    <img src="https://image.noelshack.com/fichiers/2026/13/5/1774644066-design-sans-titre-2.png" alt="Logo L'Alpage" class="h-10 w-auto opacity-90">
                 </a>
-                <p class="text-sm leading-relaxed max-w-xs mx-auto md:mx-0">Restaurant gastronomique montagnard.<br>L'expérience authentique des Pyrénées à l'état pur.</p>
+                <p data-i18n="foot_desc" class="text-sm leading-relaxed max-w-xs mx-auto md:mx-0">Restaurant gastronomique montagnard.<br>L'expérience authentique des Pyrénées à l'état pur.</p>
             </div>
-            <div>
-                <h4 class="text-white font-bold mb-6 uppercase tracking-widest text-sm">Liens Utiles</h4>
-                <ul class="space-y-3 text-sm">
-                    <li><a href="#concept" class="hover:text-wood-500 hover:translate-x-1 inline-block transition-transform">Le Concept</a></li>
-                    <li><a href="#menu" class="hover:text-wood-500 hover:translate-x-1 inline-block transition-transform">La Carte</a></li>
-                    <li><a href="#fournisseurs" class="hover:text-wood-500 hover:translate-x-1 inline-block transition-transform">Nos Producteurs</a></li>
-                    <li><a href="#" class="hover:text-wood-500 hover:translate-x-1 inline-block transition-transform">Mentions Légales</a></li>
+            
+            <div class="md:col-span-1">
+                <h4 data-i18n="foot_nav" class="text-white font-bold mb-6 uppercase tracking-widest text-sm">Navigation</h4>
+                <ul class="space-y-3 text-sm flex flex-col items-center md:items-start">
+                    <li><a href="#concept" data-i18n="nav_concept" class="hover:text-wood-500 hover:translate-x-1 inline-block transition-transform">Le Concept</a></li>
+                    <li><a href="#menu" data-i18n="nav_menu" class="hover:text-wood-500 hover:translate-x-1 inline-block transition-transform">La Carte</a></li>
+                    <li><a href="#fournisseurs" data-i18n="nav_prod" class="hover:text-wood-500 hover:translate-x-1 inline-block transition-transform">Nos Producteurs</a></li>
+                    <li><a href="#rse" data-i18n="nav_rse" class="hover:text-wood-500 hover:translate-x-1 inline-block transition-transform">Engagement RSE</a></li>
+                    <li><button onclick="document.getElementById('legal-modal').classList.remove('hidden')" class="hover:text-wood-500 hover:translate-x-1 inline-block transition-transform text-left"><span data-i18n="legal_btn">Mentions Légales & RGPD</span></button></li>
                 </ul>
             </div>
-            <div>
-                <h4 class="text-white font-bold mb-6 uppercase tracking-widest text-sm">Suivez-nous</h4>
+
+            <div class="md:col-span-1">
+                <h4 data-i18n="foot_news" class="text-white font-bold mb-6 uppercase tracking-widest text-sm">Newsletter</h4>
+                <p data-i18n="foot_news_desc" class="text-xs mb-4">Inscrivez-vous pour être informé(e) de l'ouverture de nos saisons d'été et d'hiver, et découvrir nos nouveautés à la carte.</p>
+                <form class="flex w-full max-w-xs mx-auto md:mx-0" onsubmit="event.preventDefault(); alert('Merci pour votre inscription à notre newsletter !');">
+                    <input type="email" placeholder="Email" class="w-full px-4 py-2.5 bg-slate-800 text-white rounded-l-lg border border-slate-700 focus:outline-none focus:border-wood-500 text-sm" required>
+                    <button type="submit" class="bg-wood-500 hover:bg-wood-800 px-4 py-2.5 rounded-r-lg transition-colors flex items-center justify-center">
+                        <i data-lucide="send" class="w-4 h-4 text-white"></i>
+                    </button>
+                </form>
+            </div>
+
+            <div class="md:col-span-1">
+                <h4 data-i18n="foot_follow" class="text-white font-bold mb-6 uppercase tracking-widest text-sm">Suivez-nous</h4>
                 <div class="flex space-x-4 justify-center md:justify-start mb-8">
-                    <a href="#" class="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center hover:bg-wood-500 hover:text-white transition-all hover:-translate-y-1 hover:shadow-lg">
-                        <i data-lucide="instagram" class="w-5 h-5"></i>
+                    <a href="https://www.tiktok.com/@lalpage_de_germ" target="_blank" rel="noopener noreferrer" class="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center hover:bg-wood-500 hover:text-white transition-all hover:-translate-y-1 hover:shadow-lg" aria-label="TikTok">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"></path></svg>
                     </a>
-                    <a href="#" class="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center hover:bg-wood-500 hover:text-white transition-all hover:-translate-y-1 hover:shadow-lg">
-                        <i data-lucide="facebook" class="w-5 h-5"></i>
+                    <a href="https://www.instagram.com/lalpage_de_germ" target="_blank" rel="noopener noreferrer" class="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center hover:bg-wood-500 hover:text-white transition-all hover:-translate-y-1 hover:shadow-lg" aria-label="Instagram">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clip-rule="evenodd"></path></svg>
+                    </a>
+                    <a href="https://www.facebook.com/lalpage.de.germ" target="_blank" rel="noopener noreferrer" class="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center hover:bg-wood-500 hover:text-white transition-all hover:-translate-y-1 hover:shadow-lg" aria-label="Facebook">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd"></path></svg>
                     </a>
                 </div>
-                <p class="text-xs text-slate-500">© 2026 L'Alpage de Germ.<br>Projet d'étude. Tous droits réservés.</p>
+                <p class="text-xs text-slate-500 mt-4">© 2026 L'Alpage de Germ.<br>Projet de création d'entreprise. Tous droits réservés.</p>
             </div>
         </div>
     </footer>
+
+    <!-- Modal Mentions Légales & RGPD -->
+    <div id="legal-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="document.getElementById('legal-modal').classList.add('hidden')"></div>
+        <div class="relative bg-white rounded-3xl shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col animate-fade-in-up">
+            <div class="flex justify-between items-center p-6 sm:p-8 border-b border-gray-100 bg-[#fcfbf9] rounded-t-3xl">
+                <h3 class="font-serif text-2xl font-bold text-wood-900 flex items-center gap-3">
+                    <i data-lucide="scale" class="w-6 h-6 text-wood-500"></i> Mentions Légales & RGPD
+                </h3>
+                <button onclick="document.getElementById('legal-modal').classList.add('hidden')" class="text-gray-400 hover:text-wood-500 transition-colors bg-white w-10 h-10 rounded-full flex items-center justify-center shadow-sm border border-gray-100">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div class="p-6 sm:p-8 overflow-y-auto text-gray-600 text-sm space-y-6 leading-relaxed">
+                <div>
+                    <h4 class="font-bold text-gray-900 text-base mb-2">1. Éditeur du site</h4>
+                    <p>Le site "L'Alpage de Germ" est un projet étudiant fictif réalisé dans le cadre d'une création d'entreprise.<br>
+                    <strong>Responsables du projet :</strong> Maxime Reybaud, Agathe Colombain, Klélya Fournier--Le Porhiel et Armin Diaz.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 text-base mb-2">2. Hébergement</h4>
+                    <p>Ce site est hébergé dans un environnement de développement à des fins de démonstration académique.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 text-base mb-2">3. Propriété intellectuelle</h4>
+                    <p>L'ensemble des éléments figurant sur ce site (textes, éléments graphiques, photographies) appartiennent au projet "L'Alpage de Germ" ou font l'objet d'une autorisation d'utilisation via des banques d'images libres de droits. Toute reproduction est interdite sans accord.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 text-base mb-2">4. Protection des données (RGPD)</h4>
+                    <p>Les informations recueillies via le formulaire de réservation ou la newsletter sont totalement fictives. Aucune donnée personnelle n'est stockée, traitée de manière permanente, ou cédée à des tiers. Ce formulaire n'a qu'un but illustratif.<br>
+                    Conformément à la loi "Informatique et Libertés", vous disposez d'un droit d'accès, de rectification et de suppression de vos données.</p>
+                </div>
+            </div>
+            <div class="p-6 bg-gray-50 border-t border-gray-100 flex justify-end rounded-b-3xl">
+                <button onclick="document.getElementById('legal-modal').classList.add('hidden')" class="bg-wood-900 hover:bg-wood-500 text-white font-medium px-6 py-2.5 rounded-xl transition-colors shadow-sm">
+                    Fermer
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- Scripts -->
     <script>
@@ -706,6 +948,10 @@
                     item.classList.remove('text-white/90', 'hover:text-white');
                 });
                 if (mobileBtn) { mobileBtn.classList.add('text-gray-600', 'hover:text-wood-500'); mobileBtn.classList.remove('text-white', 'hover:text-gray-200'); }
+                
+                document.getElementById('lang-switcher').classList.remove('border-white/20');
+                document.getElementById('lang-switcher').classList.add('border-gray-200');
+
             } else {
                 navbar.classList.add('bg-transparent');
                 navbar.classList.remove('shadow-md', 'bg-white/95', 'backdrop-blur-md');
@@ -717,48 +963,79 @@
                     item.classList.remove('text-gray-600', 'hover:text-wood-500');
                 });
                 if (mobileBtn) { mobileBtn.classList.add('text-white', 'hover:text-gray-200'); mobileBtn.classList.remove('text-gray-600', 'hover:text-wood-500'); }
+                
+                document.getElementById('lang-switcher').classList.add('border-white/20');
+                document.getElementById('lang-switcher').classList.remove('border-gray-200');
             }
         });
 
         // Mobile Menu Toggle
         const btn = document.getElementById('mobile-menu-btn');
         const menu = document.getElementById('mobile-menu');
-        btn.addEventListener('click', () => {
-            menu.classList.toggle('hidden');
+        const closeBtn = document.getElementById('close-mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        function openMobileMenu() {
+            menu.classList.remove('hidden');
+            menu.classList.add('flex');
+            setTimeout(() => {
+                menu.classList.remove('opacity-0');
+                menu.classList.add('opacity-100');
+            }, 10);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMobileMenu() {
+            menu.classList.remove('opacity-100');
+            menu.classList.add('opacity-0');
+            setTimeout(() => {
+                menu.classList.add('hidden');
+                menu.classList.remove('flex');
+            }, 300);
+            document.body.style.overflow = '';
+        }
+
+        btn.addEventListener('click', openMobileMenu);
+        if (closeBtn) closeBtn.addEventListener('click', closeMobileMenu);
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', closeMobileMenu);
         });
 
-        // Tab Switching Logic (Été / Hiver)
-        function switchTab(saison) {
-            const tabEte = document.getElementById('tab-ete');
-            const tabHiver = document.getElementById('tab-hiver');
-            const btnEte = document.getElementById('btn-ete');
-            const btnHiver = document.getElementById('btn-hiver');
-
-            // Classes pour le bouton actif
-            const activeClasses = ['bg-white', 'text-wood-500', 'shadow-sm'];
-            // Classes pour le bouton inactif
-            const inactiveClasses = ['text-gray-500', 'hover:text-gray-700'];
-
-            if (saison === 'ete') {
-                tabEte.classList.remove('hidden');
-                tabEte.classList.add('block');
-                tabHiver.classList.remove('block');
-                tabHiver.classList.add('hidden');
+        // Menu Tab Switching Logic
+        function switchTab(ongletActif) {
+            const onglets = ['ete', 'hiver', 'boissons'];
+            
+            onglets.forEach(onglet => {
+                const tabContent = document.getElementById(`tab-${onglet}`);
+                const tabButton = document.getElementById(`btn-${onglet}`);
                 
-                btnEte.classList.add(...activeClasses);
-                btnEte.classList.remove(...inactiveClasses);
-                btnHiver.classList.remove(...activeClasses);
-                btnHiver.classList.add(...inactiveClasses);
+                if (onglet === ongletActif) {
+                    tabContent.classList.remove('hidden');
+                    tabContent.classList.add('block');
+                    tabButton.className = 'px-5 sm:px-8 py-2.5 rounded-full text-sm sm:text-base font-medium transition-all duration-300 flex items-center gap-2 bg-white text-wood-500 shadow-sm';
+                } else {
+                    tabContent.classList.add('hidden');
+                    tabContent.classList.remove('block');
+                    tabButton.className = 'px-5 sm:px-8 py-2.5 rounded-full text-sm sm:text-base font-medium transition-all duration-300 flex items-center gap-2 text-gray-500 hover:text-gray-700';
+                }
+            });
+        }
+
+        // Handle FAQ Toggle
+        function toggleFaq(button) {
+            const content = button.nextElementSibling;
+            const icon = button.querySelector('.faq-icon');
+            
+            // Toggle current
+            if (content.classList.contains('open')) {
+                content.classList.remove('open');
+                icon.classList.remove('rotate');
             } else {
-                tabHiver.classList.remove('hidden');
-                tabHiver.classList.add('block');
-                tabEte.classList.remove('block');
-                tabEte.classList.add('hidden');
+                document.querySelectorAll('.faq-answer').forEach(ans => ans.classList.remove('open'));
+                document.querySelectorAll('.faq-icon').forEach(ic => ic.classList.remove('rotate'));
                 
-                btnHiver.classList.add(...activeClasses);
-                btnHiver.classList.remove(...inactiveClasses);
-                btnEte.classList.remove(...activeClasses);
-                btnEte.classList.add(...inactiveClasses);
+                content.classList.add('open');
+                icon.classList.add('rotate');
             }
         }
 
@@ -819,9 +1096,7 @@
                 }
             });
 
-            // Recalculate on window resize
             window.addEventListener('resize', updateCarousel);
-            // Initial calculation
             updateCarousel();
         }
 
@@ -847,6 +1122,436 @@
                 revealOnScroll.observe(el);
             });
         });
+
+        // --- Logique de Traduction (Multilinguisme complet) ---
+        const i18n = {
+            fr: {
+                nav_concept: "Le Concept",
+                nav_menu: "Notre Carte",
+                nav_prod: "Producteurs",
+                nav_rse: "RSE",
+                nav_faq: "FAQ",
+                nav_res: "Réserver",
+                nav_galerie: "Galerie",
+                nav_res_long: "Réserver une table",
+                hero_sub: "Authenticité & Terroir",
+                hero_desc: "Une expérience gastronomique de montagne qui éveille les cinq sens. Découvrez une cuisine locale, authentique et de saison au cœur des Pyrénées.",
+                hero_btn_menu: "Découvrir la carte",
+                hero_btn_res: "Réserver une table",
+                hero_scroll: "Découvrir",
+                concept_sub: "Notre Philosophie",
+                concept_title: "Bienvenue en Altitude",
+                concept_p1: "Situé dans le cadre exceptionnel de Germ, notre restaurant est une ode à la montagne. Ici, nous ne proposons pas d'hébergement, mais un voyage culinaire exclusif.",
+                concept_p2: "Notre approche repose sur l'éveil de vos 5 sens. De l'odeur réconfortante de la raclette en hiver à la fraîcheur d'un gaspacho coloré en été, chaque détail compte. Nous sélectionnons rigoureusement nos produits pour vous offrir l'authenticité à l'état pur.",
+                concept_team_title: "Une aventure humaine",
+                concept_team_text: "L'Alpage de Germ, c'est avant tout un projet porté par quatre passionnés de restauration et de terroir : Maxime Reybaud, Agathe Colombain, Klélya Fournier--Le Porhiel et Armin Diaz. Notre volonté ? Vous offrir un moment de partage inoubliable au sommet des Pyrénées.",
+                concept_feat1: "100% Maison",
+                concept_feat1_desc: "Recettes élaborées sur place.",
+                concept_feat2: "Circuit Court",
+                concept_feat2_desc: "Artisans locaux privilégiés.",
+                menu_sub: "Notre Offre Gastronomique",
+                menu_title: "La Carte de l'Alpage",
+                menu_share: "Planches à Partager",
+                share_mixte: "Planche Mixte",
+                share_mixte_desc: "Alliance parfaite charcuteries & fromages de la vallée.",
+                share_charc: "Planche de Charcuterie",
+                share_charc_desc: "Sélection artisanale (Jambon, saucisson, coppa).",
+                share_cheese: "Planche de Fromages",
+                share_cheese_desc: "Assortiment de tomes et fromages affinés des Pyrénées.",
+                share_spread: "Planche de Tartinables",
+                share_spread_desc: "Rillettes, tapenades et créations végétales du chef.",
+                menu_tab1: "Menu d'Été",
+                menu_tab2: "Menu d'Hiver",
+                menu_tab3: "Desserts & Boissons",
+                menu_sum_entree: "Entrées Estivales",
+                sum_entree_1: "Truite façon gravlax",
+                sum_entree_2: "Tomate cœur de bœuf & mozza",
+                sum_entree_3: "Salade de lentilles du pays",
+                sum_entree_4: "Gaspacho coloré",
+                sum_entree_5: "Salade de saison",
+                menu_sum_plat: "Plats d'Été",
+                sum_plat_1: "Axoa de veau",
+                sum_plat_2: "Truite des Pyrénées en papillote",
+                sum_plat_3: "Assortiment de grillades",
+                sum_plat_3_desc: "Porc Noir de Bigorre, Agneau, Brochettes, Ventrèche",
+                menu_win_entree: "Entrées Réconfortantes",
+                win_entree_1: "Garbure Pyrénéenne",
+                win_entree_2: "Salade de gésiers",
+                win_entree_3: "Pastis gascon salé au boudin",
+                win_entree_4: "Velouté de légumes",
+                menu_win_plat: "Plats d'Hiver",
+                win_plat_1: "Porc noir de Bigorre",
+                win_plat_2: "Raclette à volonté",
+                win_plat_3: "Pot-au-feu traditionnel",
+                menu_dessert: "Nos Douceurs",
+                dessert_1: "Dessert de notre cheffe",
+                dessert_2: "Café gourmand",
+                dessert_3: "Moelleux chocolat & crème",
+                dessert_4: "Crumble de fruits de saison",
+                dessert_5: "Assiette de fromage",
+                dessert_6: "Coupe de fruits de saison",
+                dessert_7: "Glaces artisanales",
+                menu_drinks: "Caves & Boissons Locales",
+                drink_beer: "Bières Artisanales",
+                drink_beer_desc: "La Nestoise Ambrée (Jean Brasse), La Nestoise Blonde (Brasserie des Pics), La Rousse, La Blanche.",
+                drink_wine: "Vins du Terroir",
+                drink_wine_desc: "AOC Pacherenc du Vic Bilh & AOC Madiran (Domaine du Moulié), IGP Roussanne Cave de Cruet.",
+                drink_spirit: "Apéritifs & Digestifs",
+                drink_spirit_desc: "Pastis artisanal basque Odeia (Egiazki), Armagnac Duc de Camilhac, Poire Williams Saint-Florian.",
+                drink_soft: "Sans Alcool",
+                drink_soft_desc: "Mountain cola, Jus artisanaux, Thés et Infusions Bio \"Destination Premium\".",
+                prod_title: "L'Excellence de nos Producteurs",
+                prod_desc: "Parce qu'une grande cuisine ne peut exister sans d'excellents produits, nous travaillons en étroite collaboration avec les artisans de notre région.",
+                prod_oteiza: "Éleveur-artisan historique, fournisseur de nos charcuteries d'exception. Un savoir-faire unique transmis de génération en génération.",
+                prod_sajous: "Partenaire de confiance pour notre Coppa, Pâté de campagne et Rillettes de canard. La tradition charcutière pyrénéenne.",
+                prod_pics: "Créateurs de bières artisanales locales de caractère, dont notre incontournable \"La Nestoise Blonde\", brassée avec l'eau de nos montagnes.",
+                prod_moulie: "Domaine viticole d'exception, produisant nos superbes vins AOC Madiran et Pacherenc du Vic Bilh pour sublimer nos viandes.",
+                prod_brasse: "Artisans brasseurs passionnés du Gers, à l'origine de notre \"Nestoise Ambrée\". Une bière ronde et généreuse.",
+                prod_egiazki: "Producteurs engagés du célèbre Pastis artisanal basque \"Odeia\" et d'autres liqueurs locales, pour un apéritif authentique.",
+                rse_sub: "Préserver nos montagnes",
+                rse_title: "Notre Engagement RSE",
+                rse_desc: "À L'Alpage de Germ, nous sommes conscients de la fragilité de notre environnement montagnard. Notre démarche de Responsabilité Sociétale des Entreprises guide chacune de nos décisions au quotidien.",
+                rse_card1: "Empreinte Écologique",
+                rse_card1_desc: "Réduction maximale de notre impact carbone. Nous respectons une saisonnalité stricte dans nos menus et limitons les transports. Nos déchets organiques sont triés et valorisés pour limiter notre impact sur le village.",
+                rse_card2: "Économie Solidaire",
+                rse_card2_desc: "Nos fournisseurs ne sont pas que des prestataires, ce sont nos partenaires. En achetant en direct et en circuit court, nous garantissons une juste rémunération aux agriculteurs et artisans des Hautes-Pyrénées.",
+                rse_card3: "Bien-être Humain",
+                rse_card3_desc: "Le pilier social est au cœur de notre aventure. Nous veillons à offrir un cadre de travail sain, respectueux et stimulant à nos collaborateurs, car une équipe épanouie est la clé d'un accueil authentique et chaleureux.",
+                avis_title: "Ce qu'ils en pensent",
+                avis_desc: "Note de 4.9/5 basée sur plus de 150 avis",
+                avis_1: "\"Une expérience inoubliable ! La raclette avec le Porc Noir de Bigorre après une bonne journée dans les Pyrénées est un pur bonheur. Équipe très souriante.\"",
+                avis_d1: "Il y a 2 semaines",
+                avis_2: "\"Le concept des 5 sens est bien là. La décoration, l'odeur du feu, et les plats faits maison nous ont fait voyager. Coup de cœur pour la truite en gravlax.\"",
+                avis_d2: "Avis certifié",
+                avis_3: "\"Tout était parfait : l'ambiance au coin du feu, le service et le repas ! Seul petit bémol, le prix des bouteilles de vin nous a semblé un peu élevé, mais la qualité était bien au rendez-vous.\"",
+                avis_d3: "Il y a 1 mois",
+                gal_sub: "En images",
+                gal_title: "L'Atmosphère de l'Alpage",
+                gal_desc: "Découvrez la chaleur de notre salle, l'authenticité de notre établissement et les moments de partage qui font l'âme de notre restaurant d'altitude.",
+                gal_item1: "Chaleur & Convivialité",
+                faq_sub: "Infos Pratiques",
+                faq_title: "Questions Fréquentes",
+                faq_q1: "Êtes-vous ouverts toute l'année ?",
+                faq_a1: "Nous fonctionnons selon une forte saisonnalité : une saison d'hiver (pour profiter des plats réconfortants et de l'ambiance chalet) et une saison d'été. Nous sommes généralement fermés durant les intersaisons (automne/printemps).",
+                faq_q2: "Comment accéder au restaurant l'hiver ?",
+                faq_a2: "Le village de Germ est accessible en voiture. Cependant, durant la saison hivernale, les équipements spéciaux (pneus neige ou chaînes) sont fortement recommandés, voire obligatoires selon la réglementation et la météo du jour.",
+                faq_q3: "Proposez-vous des options végétariennes ?",
+                faq_a3: "Oui, bien sûr. Notre carte inclut des planches de fromages, des planches de tartinables, des salades de saison et de délicieux veloutés. Notre équipe en cuisine peut également adapter certains plats sur simple demande lors de votre réservation.",
+                faq_q4: "Acceptez-vous les chiens ?",
+                faq_a4: "Nos amis les chiens sont les bienvenus sur notre terrasse, et tolérés en salle à condition qu'ils soient calmes, propres et tenus en laisse pour le confort de l'ensemble de nos convives.",
+                contact_sub: "Nous rencontrer",
+                contact_title: "Réserver une table",
+                contact_desc: "Nous vous conseillons de réserver votre table à l'avance, particulièrement en haute saison (été et hiver).",
+                form_name: "Nom complet",
+                form_phone: "Téléphone",
+                form_date: "Date souhaitée",
+                form_guests: "Nombre de convives",
+                form_btn: "Confirmer la demande",
+                contact_address: "Adresse",
+                contact_no_hotel: "(Restaurant de montagne, pas d'hébergement)",
+                foot_desc: "Restaurant gastronomique montagnard.<br>L'expérience authentique des Pyrénées à l'état pur.",
+                foot_nav: "Navigation",
+                foot_news: "Newsletter",
+                foot_news_desc: "Inscrivez-vous pour être informé(e) de l'ouverture de nos saisons d'été et d'hiver, et découvrir nos nouveautés à la carte.",
+                foot_follow: "Suivez-nous",
+                legal_btn: "Mentions Légales & RGPD"
+            },
+            en: {
+                nav_concept: "Concept",
+                nav_menu: "Our Menu",
+                nav_prod: "Producers",
+                nav_rse: "CSR",
+                nav_faq: "FAQ",
+                nav_res: "Book",
+                nav_galerie: "Gallery",
+                nav_res_long: "Book a table",
+                hero_sub: "Authenticity & Terroir",
+                hero_desc: "A mountain dining experience that awakens the five senses. Discover authentic, seasonal, and local cuisine in the heart of the Pyrenees.",
+                hero_btn_menu: "Discover the menu",
+                hero_btn_res: "Book a table",
+                hero_scroll: "Discover",
+                concept_sub: "Our Philosophy",
+                concept_title: "Welcome to the Altitude",
+                concept_p1: "Located in the exceptional setting of Germ, our restaurant is an ode to the mountains. Here, we do not offer accommodation, but an exclusive culinary journey.",
+                concept_p2: "Our approach is based on experiential marketing: awakening your 5 senses. From the comforting smell of raclette in winter to the freshness of a colorful gazpacho in summer, every detail matters. We rigorously select our products to offer you pure authenticity.",
+                concept_team_title: "A human adventure",
+                concept_team_text: "L'Alpage de Germ is above all a project driven by four enthusiasts of dining and terroir: Maxime Reybaud, Agathe Colombain, Klélya Fournier--Le Porhiel, and Armin Diaz. Our goal? To offer you an unforgettable moment of sharing at the top of the Pyrenees.",
+                concept_feat1: "100% Homemade",
+                concept_feat1_desc: "Recipes prepared on site.",
+                concept_feat2: "Short Circuit",
+                concept_feat2_desc: "Local artisans favored.",
+                menu_sub: "Our Gastronomic Offer",
+                menu_title: "The Alpage Menu",
+                menu_share: "Sharing Boards",
+                share_mixte: "Mixed Board",
+                share_mixte_desc: "Perfect blend of local charcuterie & valley cheeses.",
+                share_charc: "Charcuterie Board",
+                share_charc_desc: "Artisanal selection (Ham, sausage, coppa).",
+                share_cheese: "Cheese Board",
+                share_cheese_desc: "Assortment of aged Pyrenean cheeses.",
+                share_spread: "Spreads Board",
+                share_spread_desc: "Rillettes, tapenades and the chef's plant-based creations.",
+                menu_tab1: "Summer Menu",
+                menu_tab2: "Winter Menu",
+                menu_tab3: "Desserts & Drinks",
+                menu_sum_entree: "Summer Starters",
+                sum_entree_1: "Gravlax-style trout",
+                sum_entree_2: "Beef heart tomato & mozzarella",
+                sum_entree_3: "Local lentil salad",
+                sum_entree_4: "Colorful gazpacho",
+                sum_entree_5: "Seasonal salad",
+                menu_sum_plat: "Summer Mains",
+                sum_plat_1: "Veal Axoa",
+                sum_plat_2: "Pyrenean trout en papillote",
+                sum_plat_3: "Assorted grilled meats",
+                sum_plat_3_desc: "Black Bigorre Pork, Lamb, Skewers, Pork belly",
+                menu_win_entree: "Comforting Starters",
+                win_entree_1: "Pyrenean Garbure (cabbage stew)",
+                win_entree_2: "Gizzard salad",
+                win_entree_3: "Savory Gascon pastis with black pudding",
+                win_entree_4: "Vegetable velouté",
+                menu_win_plat: "Winter Mains",
+                win_plat_1: "Black Bigorre Pork",
+                win_plat_2: "All-you-can-eat Raclette",
+                win_plat_3: "Traditional Pot-au-feu",
+                menu_dessert: "Our Sweets",
+                dessert_1: "Our Chef's dessert",
+                dessert_2: "Café gourmand (Coffee with mini desserts)",
+                dessert_3: "Chocolate lava cake & cream",
+                dessert_4: "Seasonal fruit crumble",
+                dessert_5: "Cheese plate",
+                dessert_6: "Seasonal fruit cup",
+                dessert_7: "Artisanal ice cream",
+                menu_drinks: "Local Cellars & Drinks",
+                drink_beer: "Craft Beers",
+                drink_beer_desc: "La Nestoise Amber (Jean Brasse), La Nestoise Blonde (Brasserie des Pics), Red, White.",
+                drink_wine: "Local Wines",
+                drink_wine_desc: "AOC Pacherenc du Vic Bilh & AOC Madiran (Domaine du Moulié), IGP Roussanne Cave de Cruet.",
+                drink_spirit: "Aperitifs & Digestifs",
+                drink_spirit_desc: "Basque artisanal pastis Odeia (Egiazki), Armagnac Duc de Camilhac, Pear Williams Saint-Florian.",
+                drink_soft: "Alcohol-Free",
+                drink_soft_desc: "Mountain cola, Artisanal juices, Organic Teas and Infusions \"Destination Premium\".",
+                prod_title: "The Excellence of our Producers",
+                prod_desc: "Because great cuisine cannot exist without excellent products, we work closely with the artisans of our region.",
+                prod_oteiza: "Historic breeder-artisan, supplier of our exceptional charcuterie. Unique know-how passed down through generations.",
+                prod_sajous: "Trusted partner for our Coppa, country pâté and duck rillettes. The Pyrenean charcuterie tradition.",
+                prod_pics: "Creators of characterful local craft beers, including our unmissable 'La Nestoise Blonde', brewed with pure mountain water.",
+                prod_moulie: "Exceptional wine estate, producing our superb AOC Madiran and Pacherenc du Vic Bilh wines to enhance our meats.",
+                prod_brasse: "Passionate craft brewers from the Gers, creators of our 'Nestoise Ambrée'. A round and generous beer.",
+                prod_egiazki: "Committed producers of the famous 'Odeia' Basque craft Pastis and other local liqueurs, for an authentic aperitif.",
+                rse_sub: "Preserving our mountains",
+                rse_title: "Our CSR Commitment",
+                rse_desc: "At L'Alpage de Germ, we are aware of the fragility of our mountain environment. Our Corporate Social Responsibility approach guides each of our daily decisions.",
+                rse_card1: "Ecological Footprint",
+                rse_card1_desc: "Maximum reduction of our carbon impact. We respect strict seasonality in our menus and limit transport. Our organic waste is sorted and recycled.",
+                rse_card2: "Solidarity Economy",
+                rse_card2_desc: "Our suppliers are not just providers, they are our partners. By buying direct and locally, we guarantee fair remuneration to farmers and artisans.",
+                rse_card3: "Human Well-being",
+                rse_card3_desc: "The social pillar is at the heart of our adventure. We ensure a healthy, respectful, and stimulating work environment for our employees.",
+                avis_title: "What they think",
+                avis_desc: "4.9/5 rating based on over 150 reviews",
+                avis_1: "\"An unforgettable experience! Raclette with Porc Noir de Bigorre after a great day in the Pyrenees is pure bliss. Very smiling team.\"",
+                avis_d1: "2 weeks ago",
+                avis_2: "\"The 5 senses concept is truly there. The decor, the smell of the fire, and the homemade dishes took us on a journey. Loved the gravlax trout.\"",
+                avis_d2: "Verified review",
+                avis_3: "\"Everything was perfect: the atmosphere by the fire, the service, and the meal! Only minor downside, the wine bottles seemed a bit pricey, but the quality was definitely there.\"",
+                avis_d3: "1 month ago",
+                gal_sub: "In pictures",
+                gal_title: "The Alpage Atmosphere",
+                gal_desc: "Discover the warmth of our dining room, the authenticity of our establishment, and the moments of sharing that make up the soul of our mountain restaurant.",
+                gal_item1: "Warmth & Conviviality",
+                faq_sub: "Practical Info",
+                faq_title: "Frequently Asked Questions",
+                faq_q1: "Are you open all year round?",
+                faq_a1: "We operate according to strong seasonality: a winter season and a summer season. We are generally closed during the off-seasons (autumn/spring).",
+                faq_q2: "How to access the restaurant in winter?",
+                faq_a2: "The village of Germ is accessible by car. However, during the winter season, special equipment (snow tires or chains) is highly recommended.",
+                faq_q3: "Do you offer vegetarian options?",
+                faq_a3: "Yes, of course. Our menu includes cheese boards, spreads, seasonal salads, and delicious soups. Our team can also adapt certain dishes.",
+                faq_q4: "Do you accept dogs?",
+                faq_a4: "Our dog friends are welcome on our terrace, and tolerated indoors provided they are calm and kept on a leash.",
+                contact_sub: "Meet us",
+                contact_title: "Book a table",
+                contact_desc: "We advise you to book your table in advance, especially in high season (summer and winter).",
+                form_name: "Full Name",
+                form_phone: "Phone Number",
+                form_date: "Desired Date",
+                form_guests: "Number of guests",
+                form_btn: "Confirm request",
+                contact_address: "Address",
+                contact_no_hotel: "(Mountain restaurant, no accommodation)",
+                foot_desc: "Mountain gastronomic restaurant.<br>The authentic Pyrenees experience in its purest form.",
+                foot_nav: "Navigation",
+                foot_news: "Newsletter",
+                foot_news_desc: "Subscribe to be informed of the opening of our summer and winter seasons, and discover our new menu items.",
+                foot_follow: "Follow us",
+                legal_btn: "Legal Notice & GDPR"
+            },
+            es: {
+                nav_concept: "Concepto",
+                nav_menu: "Nuestra Carta",
+                nav_prod: "Productores",
+                nav_rse: "RSC",
+                nav_faq: "FAQ",
+                nav_res: "Reservar",
+                nav_galerie: "Galería",
+                nav_res_long: "Reservar mesa",
+                hero_sub: "Autenticidad y Terruño",
+                hero_desc: "Una experiencia gastronómica de montaña que despierta los cinco sentidos. Descubra la cocina local, auténtica y de temporada en el corazón de los Pirineos.",
+                hero_btn_menu: "Ver la carta",
+                hero_btn_res: "Reservar mesa",
+                hero_scroll: "Descubrir",
+                concept_sub: "Nuestra Filosofía",
+                concept_title: "Bienvenidos a la Altura",
+                concept_p1: "Situado en el entorno excepcional de Germ, nuestro restaurante es una oda a la montaña. Aquí no ofrecemos alojamiento, sino un viaje culinario exclusivo.",
+                concept_p2: "Nuestro enfoque se basa en despertar sus 5 sentidos. Desde el olor reconfortante de la raclette en invierno hasta la frescura de un gazpacho colorido en verano, cada detalle cuenta. Seleccionamos rigurosamente nuestros productos para ofrecerle la autenticidad en estado puro.",
+                concept_team_title: "Una aventura humana",
+                concept_team_text: "L'Alpage de Germ es ante todo un proyecto impulsado por cuatro apasionados de la restauración y el terruño: Maxime Reybaud, Agathe Colombain, Klélya Fournier--Le Porhiel y Armin Diaz. ¿Nuestro objetivo? Ofrecerle un momento de convivencia inolvidable en la cima de los Pirineos.",
+                concept_feat1: "100% Casero",
+                concept_feat1_desc: "Recetas elaboradas en el lugar.",
+                concept_feat2: "Circuito Corto",
+                concept_feat2_desc: "Artesanos locales favorecidos.",
+                menu_sub: "Nuestra Oferta Gastronómica",
+                menu_title: "La Carta del Alpage",
+                menu_share: "Tablas para Compartir",
+                share_mixte: "Tabla Mixta",
+                share_mixte_desc: "Alianza perfecta de charcutería y quesos del valle.",
+                share_charc: "Tabla de Embutidos",
+                share_charc_desc: "Selección artesanal (Jamón, salchichón, coppa).",
+                share_cheese: "Tabla de Quesos",
+                share_cheese_desc: "Surtido de quesos curados de los Pirineos.",
+                share_spread: "Tabla de Untables",
+                share_spread_desc: "Rillettes, tapenades y creaciones vegetales del chef.",
+                menu_tab1: "Menú de Verano",
+                menu_tab2: "Menú de Invierno",
+                menu_tab3: "Postres y Bebidas",
+                menu_sum_entree: "Entrantes de Verano",
+                sum_entree_1: "Trucha estilo gravlax",
+                sum_entree_2: "Tomate corazón de buey y mozzarella",
+                sum_entree_3: "Ensalada de lentejas locales",
+                sum_entree_4: "Gazpacho colorido",
+                sum_entree_5: "Ensalada de temporada",
+                menu_sum_plat: "Platos de Verano",
+                sum_plat_1: "Axoa de ternera",
+                sum_plat_2: "Trucha de los Pirineos en papillote",
+                sum_plat_3: "Surtido de carnes a la parrilla",
+                sum_plat_3_desc: "Cerdo Negro de Bigorre, Cordero, Brochetas, Panceta",
+                menu_win_entree: "Entrantes Reconfortantes",
+                win_entree_1: "Garbure pirenaica (guiso tradicional)",
+                win_entree_2: "Ensalada de mollejas",
+                win_entree_3: "Pastis gascón salado con morcilla",
+                win_entree_4: "Crema de verduras",
+                menu_win_plat: "Platos de Invierno",
+                win_plat_1: "Cerdo negro de Bigorre",
+                win_plat_2: "Raclette a voluntad",
+                win_plat_3: "Pot-au-feu tradicional (cocido)",
+                menu_dessert: "Nuestros Dulces",
+                dessert_1: "Postre de nuestra chef",
+                dessert_2: "Café gourmand (Café con mini postres)",
+                dessert_3: "Coulant de chocolate y crema",
+                dessert_4: "Crumble de frutas de temporada",
+                dessert_5: "Plato de quesos",
+                dessert_6: "Copa de frutas de temporada",
+                dessert_7: "Helados artesanales",
+                menu_drinks: "Bodega y Bebidas",
+                drink_beer: "Cervezas Artesanales",
+                drink_beer_desc: "La Nestoise Ámbar (Jean Brasse), La Nestoise Rubia (Brasserie des Pics), Roja, Blanca.",
+                drink_wine: "Vinos Locales",
+                drink_wine_desc: "AOC Pacherenc du Vic Bilh y AOC Madiran (Domaine du Moulié), IGP Roussanne Cave de Cruet.",
+                drink_spirit: "Aperitivos y Digestivos",
+                drink_spirit_desc: "Pastis artesanal vasco Odeia (Egiazki), Armagnac Duc de Camilhac, Pera Williams Saint-Florian.",
+                drink_soft: "Sin Alcohol",
+                drink_soft_desc: "Mountain cola, Jugos artesanales, Tés e Infusiones Orgánicas \"Destination Premium\".",
+                prod_title: "La Excelencia de nuestros Productores",
+                prod_desc: "Porque una gran cocina no puede existir sin excelentes productos, trabajamos en estrecha colaboración con los artesanos de nuestra región.",
+                prod_oteiza: "Criador-artesano histórico, proveedor de nuestros embutidos excepcionales. Un saber hacer único.",
+                prod_sajous: "Socio de confianza para nuestra Coppa, paté de campaña y rillettes. La tradición charcutera pirenaica.",
+                prod_pics: "Creadores de cervezas artesanales locales, incluyendo nuestra 'Nestoise Blonde', elaborada con agua de montaña.",
+                prod_moulie: "Excepcional finca vinícola, produciendo nuestros magníficos vinos AOC Madiran y Pacherenc du Vic Bilh.",
+                prod_brasse: "Apasionados cerveceros artesanales de Gers, origen de nuestra 'Nestoise Ambrée'. Una cerveza generosa.",
+                prod_egiazki: "Productores comprometidos del famoso Pastis artesanal vasco 'Odeia' y otros licores locales.",
+                rse_sub: "Preservar nuestras montañas",
+                rse_title: "Nuestro Compromiso RSC",
+                rse_desc: "En L'Alpage de Germ, somos conscientes de la fragilidad de nuestro entorno montañoso. Nuestro enfoque de Responsabilidad Social Corporativa guía cada una de nuestras decisiones diarias.",
+                rse_card1: "Huella Ecológica",
+                rse_card1_desc: "Reducción máxima de nuestro impacto de carbono. Respetamos una estricta estacionalidad y limitamos el transporte. Nuestros residuos son reciclados.",
+                rse_card2: "Economía Solidaria",
+                rse_card2_desc: "Nuestros proveedores son nuestros socios. Comprando directamente, garantizamos una remuneración justa a los agricultores y artesanos.",
+                rse_card3: "Bienestar Humano",
+                rse_card3_desc: "El pilar social está en el corazón de nuestra aventura. Nos aseguramos de ofrecer un ambiente de trabajo saludable y respetuoso.",
+                avis_title: "Lo que piensan",
+                avis_desc: "Nota de 4.9/5 basada en más de 150 opiniones",
+                avis_1: "\"¡Una experiencia inolvidable! La raclette con Cerdo Negro de Bigorre es una pura maravilla. Equipo muy sonriente.\"",
+                avis_d1: "Hace 2 semanas",
+                avis_2: "\"El concepto de los 5 sentidos está realmente ahí. La decoración, el olor a fuego, y los platos caseros. Nos encantó la trucha.\"",
+                avis_d2: "Opinión verificada",
+                avis_3: "\"Todo fue perfecto: el ambiente junto al fuego, el servicio y la comida. El precio del vino parecía un poco alto, pero la calidad lo compensa.\"",
+                avis_d3: "Hace 1 mes",
+                gal_sub: "En imágenes",
+                gal_title: "La Atmósfera del Alpage",
+                gal_desc: "Descubra la calidez de nuestra sala, la autenticidad de nuestro establecimiento y los momentos que conforman el alma de nuestro restaurante.",
+                gal_item1: "Calidez y Convivencia",
+                faq_sub: "Información Práctica",
+                faq_title: "Preguntas Frecuentes",
+                faq_q1: "¿Están abiertos todo el año?",
+                faq_a1: "Funcionamos con una fuerte estacionalidad: temporada de invierno y temporada de verano. Generalmente estamos cerrados en temporada baja.",
+                faq_q2: "¿Cómo llegar al restaurante en invierno?",
+                faq_a2: "El pueblo de Germ es accesible en coche. Sin embargo, durante el invierno, se recomienda encarecidamente llevar neumáticos de nieve o cadenas.",
+                faq_q3: "¿Tienen opciones vegetarianas?",
+                faq_a3: "Sí, por supuesto. Nuestra carta incluye tablas de quesos, cremas y ensaladas de temporada. Nuestro equipo también puede adaptar ciertos platos.",
+                faq_q4: "¿Aceptan perros?",
+                faq_a4: "Nuestros amigos los perros son bienvenidos en nuestra terraza, y tolerados en el interior siempre que estén tranquilos y atados.",
+                contact_sub: "Conócenos",
+                contact_title: "Reservar una mesa",
+                contact_desc: "Le aconsejamos reservar su mesa con antelación, especialmente en temporada alta (verano e invierno).",
+                form_name: "Nombre completo",
+                form_phone: "Teléfono",
+                form_date: "Fecha deseada",
+                form_guests: "Número de comensales",
+                form_btn: "Confirmar solicitud",
+                contact_address: "Dirección",
+                contact_no_hotel: "(Restaurante de montaña, sin alojamiento)",
+                foot_desc: "Restaurante gastronómico de montaña.<br>La auténtica experiencia de los Pirineos en estado puro.",
+                foot_nav: "Navegación",
+                foot_news: "Boletín",
+                foot_news_desc: "Suscríbase para estar informado de la apertura de nuestras temporadas, y descubrir nuestras novedades a la carta.",
+                foot_follow: "Síganos",
+                legal_btn: "Aviso Legal y RGPD"
+            }
+        };
+
+        function setLang(lang) {
+            // Mettre à jour les textes traduits
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[lang] && i18n[lang][key]) {
+                    if (el.tagName === 'INPUT') {
+                        // Les placeholders des inputs ne sont pas utilisés ici, on change les labels
+                    } else if (el.innerHTML.includes('<br>')) {
+                        el.innerHTML = i18n[lang][key];
+                    } else {
+                        el.textContent = i18n[lang][key];
+                    }
+                }
+            });
+
+            // Mettre à jour le style visuel des drapeaux (grisés si inactifs)
+            const allFlags = document.querySelectorAll('.nav-lang, .mobile-lang');
+            allFlags.forEach(btn => {
+                if (btn.getAttribute('data-lang') === lang) {
+                    btn.classList.remove('opacity-50', 'grayscale');
+                    btn.classList.add('opacity-100');
+                } else {
+                    btn.classList.add('opacity-50', 'grayscale');
+                    btn.classList.remove('opacity-100');
+                }
+            });
+            
+            // Fermer le menu mobile si on change la langue depuis le mobile
+            if(window.innerWidth < 1280) {
+                closeMobileMenu();
+            }
+        }
     </script>
 </body>
 </html>
